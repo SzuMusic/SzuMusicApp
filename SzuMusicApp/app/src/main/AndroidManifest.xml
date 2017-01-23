@@ -30,30 +30,31 @@
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote"></service>
+            android:process=":remote" />
         <!-- 下面填开发者申请的ak -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="avhtK5GiZebM6bo5WOZvx27fj3sYG0YX" />
 
-        <!--下面是各个activity的注册-->
+        <!-- 下面是各个activity的注册 -->
 
-        <!--测试activity-->
+
+        <!-- 测试activity -->
         <activity android:name=".ui.main.MainActivity">
 
         </activity>
 
-        <!--首页activity-->
+        <!-- 首页activity -->
         <activity
             android:name=".ui.main.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
 
