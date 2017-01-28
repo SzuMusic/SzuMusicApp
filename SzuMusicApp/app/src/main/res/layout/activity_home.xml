@@ -1,25 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    android:orientation="vertical"
+    tools:context=".ui.main.HomeActivity">
 
-    <include
-        layout="@layout/app_bar_home"
+    <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_home"
-        app:menu="@menu/activity_home_drawer" />
+        >
+        <!--下面是主窗口的布局-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="#ebebef"
+            >
 
-</android.support.v4.widget.DrawerLayout>
+            <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
+                android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay"
+                app:layout_scrollFlags="scroll"
+                android:background="@color/colorPrimary"
+                android:paddingTop="20dp"
+                >
+
+                    <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
+                        android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
+                        android:background="@color/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay"
+
+                        >
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.0"
+                                android:background="@drawable/edit_background01"
+                                android:padding="5dp"
+                                android:textCursorDrawable="@null"
+                                android:textSize="16dp"
+                                android:drawableLeft="@drawable/search_icon"
+                                android:drawablePadding="10dp"
+                                android:layout_marginRight="60dp"
+                                android:textColor="#000"
+                                />
+
+
+                        <ImageView
+                            android:id="@+id/talk_icon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/talk_icon"
+                            android:layout_gravity="end|center_vertical"
+                            android:layout_marginRight="20dp"
+                            />
+                    </android.support.v7.widget.Toolbar>
+
+
+
+            </android.support.design.widget.AppBarLayout>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@color/colorPrimary"
+                app:tabTextColor="#4e4e4e"
+                app:tabBackground="@color/colorWhite"
+                app:tabIndicatorColor="@color/colorPrimary"
+                app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
+                />
+
+            <!--可滑动的布局内容-->
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vp_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                />
+            <include
+                layout="@layout/include_play_bar"
+                android:layout_width="match_parent"
+                android:layout_height="57dp"
+                android:layout_gravity="bottom" />
+        </LinearLayout>
+        <!--下面是侧滑菜单的布局-->
+        <RelativeLayout
+            android:layout_width="260dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="#f4f4f4"
+            android:orientation="vertical">
+
+        </RelativeLayout>
+    </android.support.v4.widget.DrawerLayout>
+
+
+
+
+</LinearLayout>
