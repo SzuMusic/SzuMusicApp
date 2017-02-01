@@ -4,11 +4,14 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.szumusic.szumusicapp.R;
+import com.szumusic.szumusicapp.ui.common.SongListAdapter;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.listener.OnBannerClickListener;
@@ -16,7 +19,6 @@ import com.youth.banner.listener.OnBannerClickListener;
 
 public class HomeFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
-
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private Banner banner;
@@ -26,7 +28,6 @@ public class HomeFragment extends Fragment {
     public HomeFragment() {
 
     }
-
 
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
