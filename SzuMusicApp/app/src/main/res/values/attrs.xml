@@ -1,0 +1,6 @@
+<resources>
+    <declare-styleable name="CircleView">
+        <attr name="strokeWidth" format="dimension" />
+        <attr name="strokeColor" format="color" />
+    </declare-styleable>
+</resources>
