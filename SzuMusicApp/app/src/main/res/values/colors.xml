@@ -18,4 +18,7 @@
     <color name="translucent_grey_300_96p">#F5E0E0E0</color>
     <color name="translucent_grey_900_96p">#F5212121</color>
     <color name="translucent_grey_700_96p">#F5616161</color>
+    <!--songlist item-->
+    <color name="songlist_item">#e8ecef</color>
+    <color name="songlist_item_press">#d8dcdb</color>
 </resources>

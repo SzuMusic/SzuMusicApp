@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.szumusic.szumusicapp.ui.main.LocalActivity"
+    android:background="#ebebef"
+    android:id="@+id/mainHome"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
+            android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay"
+            app:layout_scrollFlags="scroll"
+            android:background="@color/colorPrimary"
+            android:paddingTop="20dp"
+            >
+
+            <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
+                android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:title="本地音乐"
+
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="本地音乐"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"
+                    />
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.AppBarLayout>
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/colorPrimary"
+            app:tabTextColor="#4e4e4e"
+            app:tabBackground="@color/colorWhite"
+            app:tabIndicatorColor="@color/colorPrimary"
+            app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
+            />
+        <!--可滑动的布局内容-->
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+        <include
+            layout="@layout/include_play_bar"
+            android:layout_width="match_parent"
+            android:layout_height="57dp"
+            android:layout_gravity="bottom" />
+    </LinearLayout>
+
+</FrameLayout>

@@ -256,6 +256,7 @@ public class ImageUtils {
         float scaleHeight = ((float) h) / height;
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);
+        System.out.println("重新获得的尺寸为"+width+"高度为"+height+"        "+scaleWidth+"  "+scaleHeight);
         return Bitmap.createBitmap(source, 0, 0, width, height, matrix, true);
 
     }

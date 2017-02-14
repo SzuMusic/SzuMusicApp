@@ -52,10 +52,7 @@ public class CircleView extends ImageView {
         mBorderPaint=new Paint();
         mBitmapPaint.setAntiAlias(true);
         mDiscBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.play_page_default_cover);
-        System.out.println("图片的宽度为"+mDiscBitmap.getWidth());
-        System.out.println("屏幕的宽度为"+getScreenWidth());
-//        mDiscBitmap = ImageUtils.resizeImage(mDiscBitmap, getScreenWidth(),
-//                getScreenWidth());
+
         //获取属性
         TypedArray typedArray=getContext().obtainStyledAttributes(attrs,R.styleable.CircleView);
         mstrokeWidth=typedArray.getDimension(R.styleable.CircleView_strokeWidth,0);
@@ -63,13 +60,19 @@ public class CircleView extends ImageView {
         typedArray.recycle();
     }
 
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        System.out.println();
         width=Math.min(getMeasuredHeight(),getMeasuredWidth());
         mradius=width/2;
         mradius= (int) (mradius-mstrokeWidth/2);
         setMeasuredDimension(width,width);
+        System.out.println("图片的宽度为"+mDiscBitmap.getWidth());
+        System.out.println("屏幕的宽度为"+getMeasuredWidth());
+//        mDiscBitmap = ImageUtils.resizeImage(mDiscBitmap, width,
+//                width);
     }
 
     @Override
@@ -98,7 +101,7 @@ public class CircleView extends ImageView {
         setmBorderPaint();
         canvas.drawCircle(width/2,width/2,mradius,mBorderPaint);
         //下面画专辑
-        canvas.drawBitmap(mDiscBitmap,0,0,null);
+        //canvas.drawBitmap(mDiscBitmap,0,0,null);
     }
 
     private void setBitmapShader(){
@@ -121,6 +124,7 @@ public class CircleView extends ImageView {
         mBorderPaint.setStyle(Paint.Style.STROKE);
         mBorderPaint.setColor(mstrokeColor);
         mBorderPaint.setStrokeCap(Paint.Cap.ROUND);
+        mBorderPaint.setAlpha((int) 0.5);
         mBorderPaint.setStrokeWidth(mstrokeWidth);
 
     }

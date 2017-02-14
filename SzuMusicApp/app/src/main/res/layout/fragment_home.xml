@@ -35,6 +35,7 @@
                 android:src="@drawable/user_avatar"
                 />
             <ImageView
+                android:id="@+id/local_music"
                 android:layout_width="0dp"
                 android:layout_height="25dp"
                 android:layout_weight="1"

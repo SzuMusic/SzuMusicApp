@@ -31,7 +31,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        System.out.println("进入了FriendsFragment的onCreateview函数");
         return inflater.inflate(R.layout.fragment_friends, container, false);
     }
 

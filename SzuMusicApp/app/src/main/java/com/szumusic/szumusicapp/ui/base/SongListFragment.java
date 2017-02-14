@@ -16,8 +16,10 @@ import com.szumusic.szumusicapp.ui.common.SongListAdapter;
 
 public class SongListFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    //是否可见
+    protected boolean isVisble;
+    // 标志位，标志Fragment已经初始化完成。
+    public boolean isPrepared = false;
     private RecyclerView recyclerView;
     private SongListAdapter songListAdapter;
     public SongListFragment() {
@@ -33,6 +35,7 @@ public class SongListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        System.out.println("进入了songlistFragment的onCreateview函数");
         View view=inflater.inflate(R.layout.fragment_song_list, container, false);
         recyclerView=(RecyclerView)view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(),1));
@@ -41,6 +44,9 @@ public class SongListFragment extends Fragment {
         return view;
     }
 
-
-
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        System.out.println("进入了setUserVisibleHint函数"+getUserVisibleHint());
+    }
 }

@@ -4,12 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent">
 
-    <com.szumusic.szumusicapp.ui.widget.CircleView
+   <!-- <com.szumusic.szumusicapp.ui.widget.CircleView
         android:layout_width="280dp"
         android:layout_height="280dp"
         android:layout_gravity="center_horizontal|center_vertical"
-        android:src="@drawable/default_cover"
-        app:strokeWidth="0dp"
-        app:strokeColor="@color/colorAccent"
-        />
+        android:src="@drawable/play_page_default_cover"
+        app:strokeWidth="4dp"
+        app:strokeColor="@color/colorWhite"
+        />-->
+    <com.szumusic.szumusicapp.ui.widget.AlbumCoverView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

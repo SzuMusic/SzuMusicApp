@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:lrc="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,7 +8,16 @@
     android:paddingRight="@dimen/activity_horizontal_margin">
 
     <include layout="@layout/include_play_page_volume_bar" />
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       android:textAlignment="center"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:text="暂无歌词"
+        android:textSize="16sp"
+        android:textColor="@color/colorWhite"
+        />
     <!--<me.wcy.lrcview.LrcView-->
         <!--android:id="@+id/lrc_view_full"-->
         <!--android:layout_width="match_parent"-->
@@ -19,4 +28,4 @@
         <!--lrc:lrcDividerHeight="24dp"-->
         <!--lrc:lrcNormalTextColor="@color/translucent_white"-->
         <!--lrc:lrcTextSize="@dimen/text_size_common" />-->
-</LinearLayout>
+</RelativeLayout>
