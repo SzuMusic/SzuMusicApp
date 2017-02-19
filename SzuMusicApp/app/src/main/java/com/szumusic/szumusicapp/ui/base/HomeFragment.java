@@ -3,6 +3,7 @@ package com.szumusic.szumusicapp.ui.base;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,31 +26,26 @@ import com.youth.banner.listener.OnBannerClickListener;
 
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
-    // TODO: Rename parameter arguments, choose names that match
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
+
     private Banner banner;
     @Bind(R.id.local_music)
     private ImageView local_music;
     String[] images= new String[] {"https://y.gtimg.cn/music/common/upload/t_focus_info_iphone/67296.jpg","https://y.gtimg.cn/music/common/upload/t_focus_info_iphone/66665.jpeg","https://y.gtimg.cn/music/common/upload/t_focus_info_iphone/67887.jpg"};
-
-
+    private String name="无音乐";//歌名
+    private String singer;//歌手
+    private boolean isPlaying;//是否处于播放状态
+    private UpdateReceiver updateReceiver;
     public HomeFragment() {
 
-    }
-
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        IntentFilter intentFilter=new IntentFilter("UPDATE_PLAYER");
+        updateReceiver=new UpdateReceiver();
+        getContext().registerReceiver(updateReceiver,intentFilter);
     }
 
     @Override
@@ -82,15 +78,39 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.local_music:
-                startActivity(new Intent(getContext(), LocalActivity.class));
+                Intent intent=new Intent(getContext(), LocalActivity.class);
+                intent.putExtra("name",name);
+                intent.putExtra("singer",singer);
+                intent.putExtra("isPlaying",isPlaying);
+                startActivity(intent);
                 break;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getContext().unregisterReceiver(updateReceiver);
     }
 
     class UpdateReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
-
+            System.out.println("HomeFragment也接受到了广播");
+            int type=intent.getIntExtra("type",1);//1表示添加新的歌曲到播放列表。2表示播放暂停事件
+            switch (type){
+                case 1:
+                    name=intent.getStringExtra("name");
+                    singer=intent.getStringExtra("singer");
+                    isPlaying=true;
+                    break;
+                case 2:
+                    isPlaying=false;
+                    break;
+                case 3:
+                    isPlaying=true;
+                    break;
+            }
         }
     }
 }

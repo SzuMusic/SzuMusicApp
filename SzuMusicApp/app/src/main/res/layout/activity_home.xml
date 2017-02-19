@@ -17,6 +17,7 @@
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         >
         <!--下面是主窗口的布局-->
         <LinearLayout
@@ -96,14 +97,58 @@
                 android:layout_gravity="bottom" />
         </LinearLayout>
         <!--下面是侧滑菜单的布局-->
-        <RelativeLayout
+       <LinearLayout
             android:layout_width="260dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:background="#f4f4f4"
-            android:orientation="vertical">
+            android:background="#f0f4f3"
+            android:orientation="vertical"
+           android:layout_marginTop="-20dp"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@drawable/party_image"
+                >
+                <!--<ImageView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="200dp"-->
+                    <!--android:src="@drawable/party_image"-->
+                    <!--/>-->
+                <com.szumusic.szumusicapp.ui.widget.CircleView
+                    android:id="@+id/user_photo"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/user_icon"
+                    android:layout_alignParentBottom="true"
+                    app:strokeWidth="4dp"
+                    app:strokeColor="@color/colorAccent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="10dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/user_photo"
+                    android:layout_alignParentBottom="true"
+                    android:text="用户008"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="35dp"
+                    />
+            </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                >
 
-        </RelativeLayout>
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
+
     </android.support.v4.widget.DrawerLayout>
 
 

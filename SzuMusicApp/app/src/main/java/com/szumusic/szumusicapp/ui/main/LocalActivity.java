@@ -3,11 +3,14 @@ package com.szumusic.szumusicapp.ui.main;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.IBinder;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -31,6 +34,7 @@ import com.szumusic.szumusicapp.data.model.Music;
 import com.szumusic.szumusicapp.ui.base.PlayerFragment;
 import com.szumusic.szumusicapp.ui.common.LocalFragmentPagerAdapter;
 import com.szumusic.szumusicapp.ui.common.MyFragmentPagerAdapter;
+import com.szumusic.szumusicapp.ui.music.player.PlayService;
 import com.szumusic.szumusicapp.utils.Bind;
 import com.szumusic.szumusicapp.utils.MusicUtils;
 import com.szumusic.szumusicapp.utils.ViewBinder;
@@ -60,7 +64,7 @@ import okhttp3.Response;
 
 import static java.lang.Float.parseFloat;
 
-public class LocalActivity extends AppCompatActivity implements View.OnClickListener {
+public class LocalActivity extends AppCompatActivity implements View.OnClickListener, ServiceConnection {
     private List<Music> musicList;
     private MusicUtils musicUtils;
     PlayberUpdateReceiver playberUpdateReceiver;
@@ -73,10 +77,11 @@ public class LocalActivity extends AppCompatActivity implements View.OnClickList
     @Bind(R.id.fl_play_bar)
     FrameLayout fl_play_bar;
     Long total;//歌曲时间总长
+    private PlayService playService;
 
     private PlayerFragment playerFragment;
     private boolean isPlayFragmentShow = false;//判断播放器的fragment是否正在显示
-    FragmentTransaction ft=getSupportFragmentManager().beginTransaction();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,8 +99,12 @@ public class LocalActivity extends AppCompatActivity implements View.OnClickList
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Intent intent=getIntent();
+        tv_play_bar_title.setText(intent.getStringExtra("name"));
+        tv_play_bar_artist.setText(intent.getStringExtra("singer"));
+        iv_play_bar_play.setSelected(intent.getBooleanExtra("isPlaying",false));
         //下面是初始化控件部分
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ViewPager viewPager = (ViewPager) findViewById(R.id.vp_view);
         LocalFragmentPagerAdapter adapter = new LocalFragmentPagerAdapter(getSupportFragmentManager(),
                 this);
@@ -105,21 +114,35 @@ public class LocalActivity extends AppCompatActivity implements View.OnClickList
         iv_play_bar_play.setOnClickListener(this);
         fl_play_bar.setOnClickListener(this);
 
-        //下面是初始化音乐部分
-        musicUtils=new MusicUtils();
-        musicList= new ArrayList<>();
-        //musicUtils.scanMusic(this,musicList);
-        //readData();
         PermissionGen.needPermission(LocalActivity.this, 100,
                 new String[] {
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                 }
         );
-        //注册音乐播放的广播接收器广播接收器
-        IntentFilter intentFilter=new IntentFilter("UPDATE_PLAYER");
-        playberUpdateReceiver=new PlayberUpdateReceiver();
-        registerReceiver(playberUpdateReceiver,intentFilter);
+
+        //异步执行后台初始化
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                System.out.println("执行了LocalActivitydoInBackground函数");
+                //启动服务
+                Intent serviceIntent=new Intent(LocalActivity.this, PlayService.class);
+                bindService(serviceIntent,LocalActivity.this,BIND_AUTO_CREATE);
+                //注册音乐播放的广播接收器广播接收器
+                IntentFilter intentFilter=new IntentFilter("UPDATE_PLAYER");
+                playberUpdateReceiver=new PlayberUpdateReceiver();
+                registerReceiver(playberUpdateReceiver,intentFilter);
+                return null;
+            }
+
+            @TargetApi(Build.VERSION_CODES.M)
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+
+            }
+        }.execute();
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -131,29 +154,6 @@ public class LocalActivity extends AppCompatActivity implements View.OnClickList
         return super.onOptionsItemSelected(item);
     }
 
-    private void readData(){
-        new AsyncTask<String, Void, List<Music>>() {
-            @Override
-            protected List<Music> doInBackground(String... params) {
-                System.out.println("执行了doInBackground函数");
-                PermissionGen.needPermission(LocalActivity.this, 100,
-                        new String[] {
-                                Manifest.permission.READ_EXTERNAL_STORAGE,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        }
-                );
-                musicUtils.scanMusic(LocalActivity.this,musicList);
-                return musicList;
-            }
-
-            @TargetApi(Build.VERSION_CODES.M)
-            @Override
-            protected void onPostExecute(List<Music> result) {
-                super.onPostExecute(result);
-                System.out.println("onPostExecute歌曲的数量为"+musicList.size());
-            }
-        }.execute("kobe");
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -177,6 +177,7 @@ public class LocalActivity extends AppCompatActivity implements View.OnClickList
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(playberUpdateReceiver);
+        unbindService(this);
 
     }
 
@@ -199,7 +200,7 @@ public class LocalActivity extends AppCompatActivity implements View.OnClickList
                 }
                 break;
             case R.id.fl_play_bar:
-                //FragmentTransaction ft=getSupportFragmentManager().beginTransaction();
+                FragmentTransaction ft=getSupportFragmentManager().beginTransaction();
                 ft.setCustomAnimations(R.anim.fragment_slide_up,0);
                 if(playerFragment==null){
                     playerFragment=new PlayerFragment();
@@ -211,8 +212,11 @@ public class LocalActivity extends AppCompatActivity implements View.OnClickList
                     System.out.println("playfragment不为空");
                 }
                 playerFragment.setTitle((String) tv_play_bar_title.getText());
-                playerFragment.setTitle((String) tv_play_bar_artist.getText());
-                playerFragment.setTotal(total);
+                playerFragment.setSinger((String) tv_play_bar_artist.getText());
+                playerFragment.setTotal(playService.getDuration());
+                System.out.println("从service获得的进度为"+playService.getCurrentDuration());
+                playerFragment.setCurrent_duration(playService.getCurrentDuration());
+                playerFragment.setIsplaying(playService.getState());
                 ft.commit();
                 isPlayFragmentShow=true;
                 break;
@@ -232,6 +236,16 @@ public class LocalActivity extends AppCompatActivity implements View.OnClickList
         super.onBackPressed();
     }
 
+    @Override
+    public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+        playService=( (PlayService.PlayBinder) iBinder).getService();
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName componentName) {
+        unbindService(this);
+    }
+
     class PlayberUpdateReceiver extends BroadcastReceiver{
 
         @Override
@@ -246,10 +260,14 @@ public class LocalActivity extends AppCompatActivity implements View.OnClickList
                     tv_play_bar_title.setText(name);
                     tv_play_bar_artist.setText(singer);
                     iv_play_bar_play.setSelected(true);
-                    if (playerFragment!=null)
-                        playerFragment.setTitle(name);
+                   /* if (playerFragment!=null)
+                        playerFragment.setTitle(name);*/
                     break;
-                default:
+                case 2:
+                    iv_play_bar_play.setSelected(false);
+                    break;
+                case 3:
+                    iv_play_bar_play.setSelected(true);
                     break;
             }
 

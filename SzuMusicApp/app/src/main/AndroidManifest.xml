@@ -36,7 +36,7 @@
         <!-- 下面填开发者申请的ak -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="avhtK5GiZebM6bo5WOZvx27fj3sYG0YX" />
+            android:value="K2eG7g5nLgbnWOdUh71wTfioXE8QhARw" />
 
         <!-- 下面是各个activity的注册 -->
 
@@ -44,18 +44,28 @@
         <!-- 测试activity -->
         <activity
             android:name=".ui.main.MainActivity"
-            android:label=" " />
+            android:theme="@style/AppTheme.NoActionBar"
+            >
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <!-- 首页activity -->
         <activity
             android:name=".ui.main.HomeActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar">
+
+            <!--
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".ui.main.LocalActivity"
@@ -64,7 +74,8 @@
         <service
             android:name=".ui.music.player.PlayService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
     </application>
 
 </manifest>

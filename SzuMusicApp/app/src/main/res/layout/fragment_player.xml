@@ -55,7 +55,9 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textColor="@color/grey"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:text="歌手名字为"
+                    />
             </LinearLayout>
         </LinearLayout>
 
