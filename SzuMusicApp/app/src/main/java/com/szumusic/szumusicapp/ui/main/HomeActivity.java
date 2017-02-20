@@ -19,12 +19,14 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
 import android.transition.Transition;
 import android.transition.TransitionValues;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -40,6 +42,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.szumusic.szumusicapp.R;
 import com.szumusic.szumusicapp.data.model.Music;
 import com.szumusic.szumusicapp.ui.base.PlayerFragment;
@@ -62,6 +65,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private boolean isPlayFragmentShow = false;//判断播放器的fragment是否正在显示
     private PlayService playService;
     PlayberUpdateReceiver playberUpdateReceiver;
+    AlertDialog dialog=null;//场景定位的dialog
     @Bind(R.id.tv_play_bar_title)
     TextView tv_play_bar_title;
     @Bind(R.id.tv_play_bar_artist)
@@ -70,6 +74,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     ImageView iv_play_bar_play;
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
+    @Bind(R.id.fab)
+    FloatingActionButton fab;
+    MaterialSpinner spinner_time;
+    MaterialSpinner spinner_position;
+    MaterialSpinner spinner_weather;
+    MaterialSpinner spinner_state;
+    MaterialSpinner spinner_mood;
+    TextView tv_position;//用户定位
 
 
     @Override
@@ -106,6 +118,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         player_layout=(LinearLayout) findViewById(R.id.player_layout);
         player_layout.setOnClickListener(this);
         iv_play_bar_play.setOnClickListener(this);
+        fab.setOnClickListener(this);
 
 //        传入当前activity的context
         ScreenUtils.init(this);
@@ -192,6 +205,30 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     intent.putExtra("type",3);
                     sendBroadcast(intent);
                     iv_play_bar_play.setSelected(true);
+                }
+                break;
+            case R.id.fab:
+                if(dialog!=null){
+                    dialog.show();
+                }else{
+                    LayoutInflater inflater = LayoutInflater.from(this);
+                    View dialog_view = inflater.inflate(R.layout.dialog_position, null);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setView(dialog_view);
+                    spinner_time= (MaterialSpinner) dialog_view.findViewById(R.id.spinner_time);
+                    spinner_position= (MaterialSpinner) dialog_view.findViewById(R.id.spinner_position);
+                    spinner_weather= (MaterialSpinner) dialog_view.findViewById(R.id.spinner_weather);
+                    spinner_state= (MaterialSpinner) dialog_view.findViewById(R.id.spinner_state);
+                    spinner_mood= (MaterialSpinner) dialog_view.findViewById(R.id.spinner_mood);
+                    tv_position= (TextView) dialog_view.findViewById(R.id.tv_position);
+                    spinner_time.setItems("清晨","上午","午间","下午","夜晚","深夜");
+                    spinner_position.setItems("居室","办公室","商店","酒吧","街道","户外","图书馆","室内运功场");
+                    spinner_weather.setItems("晴天","阴天","雨天");
+                    spinner_state.setItems("在工作","在休息","在阅读","在路途","在劳务");
+                    spinner_mood.setItems("平静","愉悦","悲伤","兴奋","高兴");
+                    tv_position.setText("       "+playService.getLocationDescri());
+                    dialog=builder.create();
+                    dialog.show();
                 }
                 break;
         }

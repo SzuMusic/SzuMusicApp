@@ -16,7 +16,7 @@ public class PlayService extends Service {
 
     private MediaPlayer mediaPlayer=new MediaPlayer();
     private LocationClient mLocationClient = null;
-    private BDLocationListener myListener = new MyLocationListener();
+    private MyLocationListener myListener = new MyLocationListener();
 
     @Override
     public void onCreate() {
@@ -79,6 +79,11 @@ public class PlayService extends Service {
         mediaPlayer.seekTo(progress);
 
     }
+    //返回场景信息
+    public String getLocationDescri(){
+        return myListener.getPoi_position();
+    }
+
     //下面是百度定位的初始化
     private void initLocation(){
         LocationClientOption option = new LocationClientOption();

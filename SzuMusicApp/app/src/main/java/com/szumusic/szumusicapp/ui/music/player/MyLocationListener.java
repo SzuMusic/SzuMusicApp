@@ -13,6 +13,8 @@ import java.util.List;
  */
 public class MyLocationListener implements BDLocationListener {
 
+    private String poi_position;//poi语义化信息
+
     @Override
     public void onReceiveLocation(BDLocation location) {
 
@@ -92,6 +94,7 @@ public class MyLocationListener implements BDLocationListener {
 
         sb.append("\nlocationdescribe : ");
         sb.append(location.getLocationDescribe());    //位置语义化信息
+        poi_position=location.getLocationDescribe();
 
         List<Poi> list = location.getPoiList();    // POI数据
         if (list != null) {
@@ -104,6 +107,10 @@ public class MyLocationListener implements BDLocationListener {
         }
 
         Log.i("BaiduLocationApiDem", sb.toString());
+    }
+
+    public String getPoi_position() {
+        return poi_position;
     }
 }
 

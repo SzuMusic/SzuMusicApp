@@ -90,6 +90,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/fab_margin"
+                app:backgroundTint="@color/colorPrimary"
+                app:background="@color/colorPrimary"
+                android:src="@drawable/icon_position"
+                 />
+
             <include
                 layout="@layout/include_play_bar"
                 android:layout_width="match_parent"
