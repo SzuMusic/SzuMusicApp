@@ -2,10 +2,12 @@ package com.szumusic.szumusicapp.data.model;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
+
 /**
  * Created by kobe_xuan on 2017/2/11.
  */
-public class Music {
+public class Music implements Serializable {
     // 歌曲类型 本地/网络
     private Type type;
     // [本地歌曲]歌曲id

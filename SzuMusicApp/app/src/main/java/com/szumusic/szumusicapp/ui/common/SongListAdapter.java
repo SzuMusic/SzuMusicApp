@@ -41,6 +41,7 @@ public class SongListAdapter extends RecyclerView.Adapter {
             order_number=(TextView)itemView.findViewById(R.id.order_number);
             btn_mark= (ImageView) itemView.findViewById(R.id.btn_mark);
             btn_mark.setOnClickListener(this);
+            order_number.setOnClickListener(this);
         }
 
         public TextView getOrder_number(){return order_number;}
@@ -72,6 +73,7 @@ public class SongListAdapter extends RecyclerView.Adapter {
                         markDialog.show();
                     }
                     break;
+
 
             }
         }

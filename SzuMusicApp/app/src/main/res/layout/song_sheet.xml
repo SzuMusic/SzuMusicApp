@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+     android:padding="10dp"
+    >
+
+    <ImageView
+        android:id="@+id/song_cover"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/songsheet03"
+
+        />
+
+    <ImageView
+        android:id="@+id/icon_radio"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/icon_radio"
+        android:layout_marginRight="-20dp"
+        android:layout_toLeftOf="@+id/song_cover"
+        android:layout_below="@+id/song_cover"
+        android:layout_marginTop="-100dp"
+        />
+    <TextView
+        android:id="@+id/listen_count"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:textColor="@color/white"
+        android:text="100"
+        android:layout_toRightOf="@+id/icon_radio"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/song_cover"
+        android:layout_marginTop="-100dp"
+        android:paddingTop="3dp"
+        />
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="回忆里的旋律回忆里的旋律回忆里的旋律"
+
+        android:layout_below="@+id/song_cover"
+        android:layout_marginTop="5dp"
+        android:textColor="#000"
+        />
+
+</RelativeLayout>

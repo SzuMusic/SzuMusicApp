@@ -39,12 +39,17 @@ public class LocalListAdapter extends RecyclerView.Adapter {
     class Viewholder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tv_name;
         TextView tv_singer;
+        TextView add_song;
+        LinearLayout content_layout;
 
         public Viewholder(View itemView) {
             super(itemView);
             tv_name = (TextView) itemView.findViewById(R.id.tv_name);
             tv_singer = (TextView) itemView.findViewById(R.id.tv_singer);
-            itemView.setOnClickListener(this);
+            add_song= (TextView) itemView.findViewById(R.id.add_song);
+            content_layout= (LinearLayout) itemView.findViewById(R.id.content_layout);
+            content_layout.setOnClickListener(this);
+            add_song.setOnClickListener(this);
 
         }
 
@@ -67,17 +72,23 @@ public class LocalListAdapter extends RecyclerView.Adapter {
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            Music current_music=musicList.get(position);
-            songname = (TextView) view.findViewById(R.id.tv_name);
-            artist = (TextView) view.findViewById(R.id.tv_singer);
-            System.out.println("点击了第" + position + "首歌曲");
-            Intent intent=new Intent("UPDATE_PLAYER");
-            intent.putExtra("name",songname.getText());
-            intent.putExtra("singer",artist.getText());
-            intent.putExtra("url",current_music.getUri());
-            intent.putExtra("total",current_music.getDuration());
-            intent.putExtra("type",1);
-            context.sendBroadcast(intent);
+            switch (view.getId()){
+                case R.id.content_layout:
+                    Music current_music=musicList.get(position);
+                    songname = (TextView) view.findViewById(R.id.tv_name);
+                    artist = (TextView) view.findViewById(R.id.tv_singer);
+                    System.out.println("点击了第" + position + "首歌曲");
+                    Intent intent=new Intent("UPDATE_PLAYER");
+                    intent.putExtra("name",songname.getText());
+                    intent.putExtra("singer",artist.getText());
+                    intent.putExtra("url",current_music.getUri());
+                    intent.putExtra("total",current_music.getDuration());
+                    intent.putExtra("type",1);
+                    context.sendBroadcast(intent);
+                    break;
+                case R.id.add_song:
+                    break;
+            }
 
         }
     }

@@ -2,6 +2,8 @@ package com.szumusic.szumusicapp.ui.music.player;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
@@ -17,6 +19,8 @@ public class PlayService extends Service {
     private MediaPlayer mediaPlayer=new MediaPlayer();
     private LocationClient mLocationClient = null;
     private MyLocationListener myListener = new MyLocationListener();
+    private IntentFilter intentFilter=new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+    private NoisyAudioStreamReceiver mNoisyReceiver = new NoisyAudioStreamReceiver();
 
     @Override
     public void onCreate() {
@@ -27,6 +31,7 @@ public class PlayService extends Service {
         //注册监听函数
         initLocation();
         mLocationClient.start();
+        registerReceiver(mNoisyReceiver,intentFilter);
     }
 
     public PlayService() {

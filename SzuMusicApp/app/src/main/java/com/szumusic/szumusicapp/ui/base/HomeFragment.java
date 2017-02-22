@@ -17,6 +17,7 @@ import android.widget.ImageView;
 
 import com.szumusic.szumusicapp.R;
 import com.szumusic.szumusicapp.ui.common.SongListAdapter;
+import com.szumusic.szumusicapp.ui.common.SongSheetAdapter;
 import com.szumusic.szumusicapp.ui.main.LocalActivity;
 import com.szumusic.szumusicapp.utils.Bind;
 import com.szumusic.szumusicapp.utils.ViewBinder;
@@ -29,13 +30,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 
     private Banner banner;
-    @Bind(R.id.local_music)
     private ImageView local_music;
     String[] images= new String[] {"https://y.gtimg.cn/music/common/upload/t_focus_info_iphone/67296.jpg","https://y.gtimg.cn/music/common/upload/t_focus_info_iphone/66665.jpeg","https://y.gtimg.cn/music/common/upload/t_focus_info_iphone/67887.jpg"};
     private String name="无音乐";//歌名
     private String singer;//歌手
     private boolean isPlaying;//是否处于播放状态
     private UpdateReceiver updateReceiver;
+    RecyclerView recyclerView;
+    SongSheetAdapter songSheetAdapter;
+
     public HomeFragment() {
 
     }
@@ -52,6 +55,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_home, container, false);
+        local_music= (ImageView) view.findViewById(R.id.local_music);
+        recyclerView= (RecyclerView) view.findViewById(R.id.recyclerView);
         banner = (Banner) view.findViewById(R.id.banner);
         banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         banner.setIndicatorGravity(BannerConfig.CENTER);
@@ -63,14 +68,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
         banner.setImages(images);
-
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
+        songSheetAdapter=new SongSheetAdapter(getContext(),6);
+        recyclerView.setAdapter(songSheetAdapter);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ViewBinder.bind(this,view);
         local_music.setOnClickListener(this);
     }
 

@@ -62,7 +62,36 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
     int current_second;//当前面秒
     Handler handler=new Handler();
     Timer timer=new Timer();
-    TimerTask timerTask;
+    TimerTask timerTask=new TimerTask() {
+        @Override
+        public void run() {
+            current_duration+=1000;
+            current_minute=(int)(current_duration/60000);
+            current_second=(int)(current_duration%60000)/1000;
+            if(current_second<10){
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        tv_current_time.setText("0"+current_minute+":0"+current_second);
+                        double progress=(current_duration/(double)total)*100;
+                        //System.out.println("当前的进度为"+(int)progress);
+                        sb_progress.setProgress((int)progress);
+                    }
+                });
+            }else{
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        tv_current_time.setText("0"+current_minute+":"+current_second);
+                        double progress=(current_duration/(double)total)*100;
+                        //System.out.println("当前的进度为"+(int)progress);
+                        sb_progress.setProgress((int)progress);
+                    }
+                });
+            }
+
+        }
+    };
     boolean isPlaying=false;
     private List<View> mViewPagerContent;
 
@@ -83,37 +112,31 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
         //player_content=(LinearLayout)view.findViewById(R.id.player_content);
         System.out.println("进入了解析函数");
         //tv_title=(TextView) view.findViewById(R.id.tv_title);
-        timerTask=new TimerTask() {
-            @Override
-            public void run() {
-                current_duration+=1000;
-                current_minute=(int)(current_duration/60000);
-                current_second=(int)(current_duration%60000)/1000;
-                if(current_second<10){
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            tv_current_time.setText("0"+current_minute+":0"+current_second);
-                            double progress=(current_duration/(double)total)*100;
-                            System.out.println("当前的进度为"+(int)progress);
-                            sb_progress.setProgress((int)progress);
-                        }
-                    });
-                }else{
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            tv_current_time.setText("0"+current_minute+":"+current_second);
-                            double progress=(current_duration/(double)total)*100;
-                            System.out.println("当前的进度为"+(int)progress);
-                            sb_progress.setProgress((int)progress);
-                        }
-                    });
+        current_minute=(int)(current_duration/60000);
+        current_second=(int)(current_duration%60000)/1000;
+        if(current_second<10){
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    tv_current_time.setText("0"+current_minute+":0"+current_second);
+                    double progress=(current_duration/(double)total)*100;
+                    //System.out.println("当前的进度为"+(int)progress);
+                    sb_progress.setProgress((int)progress);
                 }
-
-            }
-        };
-        timer.schedule(timerTask,0,1000);
+            });
+        }else{
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    tv_current_time.setText("0"+current_minute+":"+current_second);
+                    double progress=(current_duration/(double)total)*100;
+                    //System.out.println("当前的进度为"+(int)progress);
+                    sb_progress.setProgress((int)progress);
+                }
+            });
+        }
+        if(isPlaying)
+            timer.schedule(timerTask,0,1000);
 
         return view;
     }
@@ -217,7 +240,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
             else
                 tv_total_time.setText("0"+total_minute+":"+total_second);
             double progress=(current_duration/(double)total)*100;
-            System.out.println("当前的进度为"+(int)progress);
+            //System.out.println("当前的进度为"+(int)progress);
             sb_progress.setProgress((int)progress);
 
         }
@@ -238,6 +261,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
                     intent.putExtra("type",2);
                     getContext().sendBroadcast(intent);
                     iv_play.setSelected(false);
+                    timerTask.cancel();
                     timer.cancel();
                 }else{
                     Intent intent=new Intent("UPDATE_PLAYER");

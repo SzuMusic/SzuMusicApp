@@ -25,9 +25,9 @@
          android:layout_marginLeft="10dp"
          android:src="@drawable/default_cover" />-->
     <TextView
-        android:id="@+id/order_number"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:id="@+id/add_song"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
         android:text=""
         android:background="@drawable/add_icon"
         android:textAlignment="center"
@@ -37,12 +37,15 @@
         android:layout_marginLeft="10dp"
         />
     <LinearLayout
+        android:id="@+id/content_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp"
+        android:background="@drawable/songlist_item_selector"
+        android:clickable="true"
         >
 
         <TextView
