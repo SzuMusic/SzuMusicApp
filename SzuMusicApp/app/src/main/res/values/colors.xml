@@ -22,4 +22,6 @@
     <!--songlist item-->
     <color name="songlist_item">#e8ecef</color>
     <color name="songlist_item_press">#d8dcdb</color>
+    <!--one of main color-->
+    <color name="main_red">#EE2755</color>
 </resources>
