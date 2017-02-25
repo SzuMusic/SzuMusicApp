@@ -55,7 +55,7 @@
                             android:drawableLeft="@drawable/search_icon"
                             android:drawablePadding="10dp"
                             android:layout_marginRight="60dp"
-                            android:textColor="#000"
+                            android:textColor="#333"
                             />
 
 
@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="83dp"
+                android:layout_marginBottom="73dp"
                 app:backgroundTint="@color/colorPrimary"
                 app:background="@color/colorPrimary"
                 android:src="@drawable/icon_position"

@@ -17,11 +17,10 @@
         android:layout_height="0dp"
         android:layout_weight="0.5"
         >
-        <ImageView
+        <com.szumusic.szumusicapp.ui.widget.CircleView
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/logo"
-
             android:layout_centerInParent="true"
             android:layout_alignParentBottom="true"
             />

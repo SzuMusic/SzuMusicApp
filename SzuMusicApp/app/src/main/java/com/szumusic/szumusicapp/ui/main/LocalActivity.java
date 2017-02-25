@@ -76,7 +76,6 @@ public class LocalActivity extends AppCompatActivity implements View.OnClickList
     ImageView iv_play_bar_play;
     @Bind(R.id.fl_play_bar)
     FrameLayout fl_play_bar;
-    Long total;//歌曲时间总长
     private PlayService playService;
 
     private PlayerFragment playerFragment;
@@ -99,10 +98,10 @@ public class LocalActivity extends AppCompatActivity implements View.OnClickList
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
-        Intent intent=getIntent();
+       /* Intent intent=getIntent();
         tv_play_bar_title.setText(intent.getStringExtra("name"));
         tv_play_bar_artist.setText(intent.getStringExtra("singer"));
-        iv_play_bar_play.setSelected(intent.getBooleanExtra("isPlaying",false));
+        iv_play_bar_play.setSelected(intent.getBooleanExtra("isPlaying",false));*/
         //下面是初始化控件部分
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ViewPager viewPager = (ViewPager) findViewById(R.id.vp_view);
@@ -239,6 +238,12 @@ public class LocalActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         playService=( (PlayService.PlayBinder) iBinder).getService();
+        if(playService.getMusicList().size()!=0){
+            Music music=playService.getMusic();
+            tv_play_bar_title.setText(music.getTitle());
+            tv_play_bar_artist.setText(music.getArtist()+"-"+music.getAlbum());
+            iv_play_bar_play.setSelected(playService.getState());
+        }
     }
 
     @Override
@@ -256,7 +261,6 @@ public class LocalActivity extends AppCompatActivity implements View.OnClickList
                 case 1:
                     String name=intent.getStringExtra("name");
                     String singer=intent.getStringExtra("singer");
-                    total=intent.getLongExtra("total",0);
                     tv_play_bar_title.setText(name);
                     tv_play_bar_artist.setText(singer);
                     iv_play_bar_play.setSelected(true);
@@ -267,6 +271,16 @@ public class LocalActivity extends AppCompatActivity implements View.OnClickList
                     iv_play_bar_play.setSelected(false);
                     break;
                 case 3:
+                    iv_play_bar_play.setSelected(true);
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    System.out.println("HomeActivity收到type=5的广播");
+                    String songname=intent.getStringExtra("name");
+                    String songsinger=intent.getStringExtra("singer");
+                    tv_play_bar_title.setText(songname);
+                    tv_play_bar_artist.setText(songsinger);
                     iv_play_bar_play.setSelected(true);
                     break;
             }

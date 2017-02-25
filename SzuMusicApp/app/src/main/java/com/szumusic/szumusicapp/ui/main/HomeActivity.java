@@ -41,6 +41,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.szumusic.szumusicapp.R;
@@ -76,6 +77,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     RecyclerView recyclerView;
     @Bind(R.id.fab)
     FloatingActionButton fab;
+    @Bind(R.id.talk_icon)
+    ImageView talk_icon;
     MaterialSpinner spinner_time;
     MaterialSpinner spinner_position;
     MaterialSpinner spinner_weather;
@@ -119,6 +122,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         player_layout.setOnClickListener(this);
         iv_play_bar_play.setOnClickListener(this);
         fab.setOnClickListener(this);
+        talk_icon.setOnClickListener(this);
 
 //        传入当前activity的context
         ScreenUtils.init(this);
@@ -231,13 +235,23 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     dialog.show();
                 }
                 break;
+            case R.id.talk_icon:
+                Toast.makeText(getApplicationContext(),"语音识别功能正在开发中",Toast.LENGTH_SHORT);
+                System.out.println("点击了语音icon");
+                break;
         }
     }
 
     @Override
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         playService=( (PlayService.PlayBinder) iBinder).getService();
-        System.out.println("执行了onServiceConnected函数:当前mediaplayer的状态为"+playService.getState());
+        System.out.println("执行了onServiceConnected函数:当前mediaplayer的状态为"+playService.getState()+playService.getMusicList().size());
+        if(playService.getMusicList().size()!=0){
+            Music music=playService.getMusic();
+            tv_play_bar_title.setText(music.getTitle());
+            tv_play_bar_artist.setText(music.getArtist()+"-"+music.getAlbum());
+            iv_play_bar_play.setSelected(playService.getState());
+        }
     }
 
     @Override
@@ -262,16 +276,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onReceive(Context context, Intent intent) {
             System.out.println("HomeActivity接受到了广播");
-            int type=intent.getIntExtra("type",1);//1表示添加新的歌曲到播放列表。2表示播放暂停事件
+            int type=intent.getIntExtra("type",1);//1表示添加新的歌曲到播放列表。3、2表示播放暂停事件,4表示更新进度
             switch (type){
                 case 1:
-                    String name=intent.getStringExtra("name");
-                    String singer=intent.getStringExtra("singer");
-                    String url=intent.getStringExtra("url");
-                    playService.playMusic(url);
-                    tv_play_bar_title.setText(name);
-                    tv_play_bar_artist.setText(singer);
+
+                    Music music= (Music) intent.getSerializableExtra("music");
+                    tv_play_bar_title.setText(music.getTitle());
+                    tv_play_bar_artist.setText(music.getArtist()+"-"+music.getAlbum());
                     iv_play_bar_play.setSelected(true);
+                    playService.playMusic(music);
+                    //playService.addMusic(music);
                     break;
                 case 2:
                     playService.pause();
@@ -282,10 +296,21 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     iv_play_bar_play.setSelected(true);
                     break;
                 case 4:
-
                     int progress=intent.getIntExtra("progress",0);
                     playService.setProgress(progress);
                     break;
+                case 5:
+                    System.out.println("HomeActivity收到type=5的广播");
+                    String songname=intent.getStringExtra("name");
+                    String songsinger=intent.getStringExtra("singer");
+                    tv_play_bar_title.setText(songname);
+                    tv_play_bar_artist.setText(songsinger);
+                    iv_play_bar_play.setSelected(true);
+                    break;
+                case 6:
+                    System.out.println("收到type=6的广播");
+                    Music music1= (Music) intent.getSerializableExtra("music");
+                    playService.addMusic(music1);
             }
         }
     }
