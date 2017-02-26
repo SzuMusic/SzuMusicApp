@@ -12,12 +12,19 @@
     android:fitsSystemWindows="true"
     android:background="#f4f4f4"
     >
+    <LinearLayout
+        android:id="@+id/login_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5"
         >
         <com.szumusic.szumusicapp.ui.widget.CircleView
+
+            android:id="@+id/mLogo"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/logo"
@@ -30,6 +37,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_weight="0.5"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
         >
 
         <TextView
@@ -67,7 +78,7 @@
             android:background="@drawable/login_editx2"
             />
 
-        <Button android:id="@+id/email_sign_in_button"
+        <Button android:id="@+id/login_in_button"
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,5 +107,6 @@
                 android:textSize="18sp"
                 android:layout_alignParentRight="true"/>
         </RelativeLayout>
+    </LinearLayout>
     </LinearLayout>
 </LinearLayout>
