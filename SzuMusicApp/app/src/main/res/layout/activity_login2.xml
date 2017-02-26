@@ -23,6 +23,7 @@
         android:layout_weight="0.5"
         >
         <com.szumusic.szumusicapp.ui.widget.CircleView
+
             android:id="@+id/mLogo"
             android:layout_width="100dp"
             android:layout_height="100dp"

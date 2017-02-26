@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.szumusic.szumusicapp.R;
 import com.szumusic.szumusicapp.data.model.Music;
@@ -84,9 +85,16 @@ public class LocalListAdapter extends RecyclerView.Adapter {
                     intent.putExtra("url",current_music.getUri());
                     intent.putExtra("total",current_music.getDuration());
                     intent.putExtra("type",1);
+                    intent.putExtra("music",current_music);
                     context.sendBroadcast(intent);
                     break;
                 case R.id.add_song:
+                    System.out.println("点击了添加歌曲到列表的按钮");
+                    Intent intent1=new Intent("UPDATE_PLAYER");
+                    intent1.putExtra("type",6);
+                    intent1.putExtra("music",musicList.get(position));
+                    Toast.makeText(context,"成功添加一首歌曲",Toast.LENGTH_SHORT).show();
+                    context.sendBroadcast(intent1);
                     break;
             }
 

@@ -85,9 +85,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()){
             case R.id.local_music:
                 Intent intent=new Intent(getContext(), LocalActivity.class);
-                intent.putExtra("name",name);
+              /*  intent.putExtra("name",name);
                 intent.putExtra("singer",singer);
-                intent.putExtra("isPlaying",isPlaying);
+                intent.putExtra("isPlaying",isPlaying);*/
                 startActivity(intent);
                 break;
         }
@@ -114,6 +114,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     isPlaying=false;
                     break;
                 case 3:
+                    isPlaying=true;
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    name=intent.getStringExtra("name");
+                    singer=intent.getStringExtra("singer");
                     isPlaying=true;
                     break;
             }
