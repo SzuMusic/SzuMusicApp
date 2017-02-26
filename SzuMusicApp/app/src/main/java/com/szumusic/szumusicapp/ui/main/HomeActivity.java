@@ -37,6 +37,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -79,6 +81,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     FloatingActionButton fab;
     @Bind(R.id.talk_icon)
     ImageView talk_icon;
+    @Bind(R.id.search_edit)
+    EditText search_edit;
+
     MaterialSpinner spinner_time;
     MaterialSpinner spinner_position;
     MaterialSpinner spinner_weather;
@@ -123,6 +128,19 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         iv_play_bar_play.setOnClickListener(this);
         fab.setOnClickListener(this);
         talk_icon.setOnClickListener(this);
+        search_edit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEND || (keyEvent != null && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    System.out.println("监听到了回车事件");
+                    Intent intent=new Intent(HomeActivity.this,SearchActivity.class);
+                    intent.putExtra("key",search_edit.getText());
+                    startActivity(intent);
+                    return true;
+                }
+                return false;
+            }
+        });
 
 //        传入当前activity的context
         ScreenUtils.init(this);
@@ -236,7 +254,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.talk_icon:
-                Toast.makeText(getApplicationContext(),"语音识别功能正在开发中",Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(),"语音识别功能正在开发中，敬请关注",Toast.LENGTH_SHORT).show();
                 System.out.println("点击了语音icon");
                 break;
         }
@@ -276,10 +294,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onReceive(Context context, Intent intent) {
             System.out.println("HomeActivity接受到了广播");
-            int type=intent.getIntExtra("type",1);//1表示添加新的歌曲到播放列表。3、2表示播放暂停事件,4表示更新进度
+            int type=intent.getIntExtra("type",1);//1表示添加新的歌曲到播放列表。3、2表示播放暂停事件,4表示更新进度,5表示监听到播放完成后自动播放下一首,6表示增加歌曲到播放列表，7表示向service请求下一首
             switch (type){
                 case 1:
-
                     Music music= (Music) intent.getSerializableExtra("music");
                     tv_play_bar_title.setText(music.getTitle());
                     tv_play_bar_artist.setText(music.getArtist()+"-"+music.getAlbum());
@@ -311,6 +328,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     System.out.println("收到type=6的广播");
                     Music music1= (Music) intent.getSerializableExtra("music");
                     playService.addMusic(music1);
+                    break;
+                case 7:
+                    playService.next();
+                    break;
             }
         }
     }

@@ -104,6 +104,16 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
         System.out.println("进入了播放结束的函数");
+        playNext(mediaPlayer);
+    }
+
+    //播放下一首(共有方法，不带参数，只供调用)
+    public void next(){
+       playNext(mediaPlayer);
+    }
+
+    //播放下一首(私有方法，带参数)
+    private void playNext(MediaPlayer mediaPlayer) {
         songPosition++;
         System.out.println("songPosition为"+songPosition);
         System.out.println("musicList的size为"+musicList.size());
@@ -120,9 +130,54 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
             mediaPlayer.setDataSource(music.getUri());
             mediaPlayer.prepare();
             mediaPlayer.start();
+            Intent playFragment=new Intent("UPDATE_FRAGMENT");
+            playFragment.putExtra("type",1);
+            playFragment.putExtra("name",music.getTitle());
+            playFragment.putExtra("singer",music.getArtist() + "-" + music.getAlbum());
+            playFragment.putExtra("currentDuration",getCurrentDuration());
+            playFragment.putExtra("total",getDuration());
+            getApplicationContext().sendBroadcast(playFragment);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        remoteViews.setTextViewText(R.id.title,music.getTitle());
+        remoteViews.setTextViewText(R.id.singer,music.getArtist()+"-"+music.getAlbum());
+        remoteViews.setImageViewResource(R.id.play,R.drawable.ic_play_pause);
+        notificationManager.notify(NOTIFICATE_ID,playNotification);
+    }
+
+    //播放上一首
+    public void playPrev(){
+        songPosition--;
+        System.out.println("songPosition为"+songPosition);
+        System.out.println("musicList的size为"+musicList.size());
+        if(songPosition>=musicList.size()||songPosition<0)
+            songPosition=0;
+        Music music=musicList.get(songPosition);
+        Intent intent=new Intent("UPDATE_PLAYER");
+        intent.putExtra("type",5);
+        intent.putExtra("name",music.getTitle());
+        intent.putExtra("singer",music.getArtist() + "-" + music.getAlbum());
+        getApplicationContext().sendBroadcast(intent);
+        mediaPlayer.reset();
+        try {
+            mediaPlayer.setDataSource(music.getUri());
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+            Intent playFragment=new Intent("UPDATE_FRAGMENT");
+            playFragment.putExtra("type",1);
+            playFragment.putExtra("name",music.getTitle());
+            playFragment.putExtra("singer",music.getArtist() + "-" + music.getAlbum());
+            playFragment.putExtra("currentDuration",getCurrentDuration());
+            playFragment.putExtra("total",getDuration());
+            getApplicationContext().sendBroadcast(playFragment);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        remoteViews.setTextViewText(R.id.title,music.getTitle());
+        remoteViews.setTextViewText(R.id.singer,music.getArtist()+"-"+music.getAlbum());
+        remoteViews.setImageViewResource(R.id.play,R.drawable.ic_play_pause);
+        notificationManager.notify(NOTIFICATE_ID,playNotification);
     }
 
     public class PlayBinder extends Binder {
@@ -159,6 +214,10 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
             next_intent.putExtra("type",3);
             PendingIntent next_pendingIntent=PendingIntent.getBroadcast(this,3,next_intent,PendingIntent.FLAG_UPDATE_CURRENT);
             remoteViews.setOnClickPendingIntent(R.id.next,next_pendingIntent);
+            Intent prev_intent=new Intent("NOTIFICATION_PLAY");
+            prev_intent.putExtra("type",4);
+            PendingIntent prev_pendingIntent=PendingIntent.getBroadcast(this,4,prev_intent,PendingIntent.FLAG_UPDATE_CURRENT);
+            remoteViews.setOnClickPendingIntent(R.id.iv_prev,prev_pendingIntent);
 
             builder.setSmallIcon(R.drawable.logo);
             playNotification = builder.build();
@@ -252,8 +311,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                 updatePlayer.putExtra("type",2);
                 sendBroadcast(updatePlayer);
             }else if(recceiver_action.equals("NOTIFICATION_PLAY")){
-                int type=intent.getIntExtra("type",0);//1表示播放暂停按钮，2表示关闭
-
+                int type=intent.getIntExtra("type",0);//1表示播放暂停按钮，2表示关闭,3表示下一首,4表示上一首
                 switch (type){
                     case 1:
                         if(mediaPlayer.isPlaying()) {
@@ -268,10 +326,17 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                         break;
                     case 2:
                         notificationManager.cancel(NOTIFICATE_ID);
+                        Intent updatePlayer = new Intent("UPDATE_PLAYER");
+                        updatePlayer.putExtra("type", 2);
+                        sendBroadcast(updatePlayer);
                         playNotification=null;
                         break;
                     case 3:
-
+                        next();
+                        break;
+                    case 4:
+                        playPrev();
+                        break;
                 }
 
             }

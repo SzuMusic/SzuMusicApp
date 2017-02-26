@@ -8,7 +8,8 @@
          android:id="@+id/cover"
          android:layout_width="95dp"
          android:layout_height="95dp"
-         android:src="@drawable/default_cover"
+         android:src="@drawable/logo"
+         android:background="@color/main_red"
          />
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -46,6 +47,7 @@
                 android:layout_weight="1"
                 />
             <ImageView
+                android:id="@+id/iv_prev"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_play_prev"

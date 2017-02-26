@@ -65,8 +65,6 @@ import okhttp3.Response;
 import static java.lang.Float.parseFloat;
 
 public class LocalActivity extends AppCompatActivity implements View.OnClickListener, ServiceConnection {
-    private List<Music> musicList;
-    private MusicUtils musicUtils;
     PlayberUpdateReceiver playberUpdateReceiver;
     @Bind(R.id.tv_play_bar_title)
     TextView tv_play_bar_title;
@@ -76,6 +74,8 @@ public class LocalActivity extends AppCompatActivity implements View.OnClickList
     ImageView iv_play_bar_play;
     @Bind(R.id.fl_play_bar)
     FrameLayout fl_play_bar;
+    @Bind(R.id.iv_play_bar_next)
+    ImageView iv_play_bar_next;
     private PlayService playService;
 
     private PlayerFragment playerFragment;
@@ -112,6 +112,7 @@ public class LocalActivity extends AppCompatActivity implements View.OnClickList
         tabLayout.setupWithViewPager(viewPager);
         iv_play_bar_play.setOnClickListener(this);
         fl_play_bar.setOnClickListener(this);
+        iv_play_bar_next.setOnClickListener(this);
 
         PermissionGen.needPermission(LocalActivity.this, 100,
                 new String[] {
@@ -218,6 +219,9 @@ public class LocalActivity extends AppCompatActivity implements View.OnClickList
                 playerFragment.setIsplaying(playService.getState());
                 ft.commit();
                 isPlayFragmentShow=true;
+                break;
+            case R.id.iv_play_bar_next:
+                playService.next();
                 break;
         }
     }

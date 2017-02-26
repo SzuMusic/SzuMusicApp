@@ -1,8 +1,9 @@
 package com.szumusic.szumusicapp.ui.base;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,7 +13,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -51,6 +51,8 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
     TextView tv_current_time;
     @Bind(R.id.sb_progress)
     SeekBar sb_progress;
+    @Bind(R.id.iv_next)
+    ImageView iv_next;
 
     String title;//歌名
     String singer;//歌手
@@ -94,6 +96,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
     };
     boolean isPlaying=false;
     private List<View> mViewPagerContent;
+    PlayReceiver playReceiver;
 
     public PlayerFragment() {
         // Required empty public constructor
@@ -102,7 +105,9 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        IntentFilter intentFilter=new IntentFilter("UPDATE_FRAGMENT");
+        playReceiver =new PlayReceiver();
+        getContext().registerReceiver(playReceiver,intentFilter);
     }
 
     @Override
@@ -167,6 +172,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
         ilIndicator.create(mViewPagerContent.size());
         iv_play.setOnClickListener(this);
         sb_progress.setOnSeekBarChangeListener(this);
+        iv_next.setOnClickListener(this);
         tv_title.setText(title);
         iv_play.setSelected(isPlaying);
         tv_artist.setText(singer);
@@ -300,6 +306,11 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
                     timer.schedule(timerTask,0,1000);
                 }
                 break;
+            case R.id.iv_next:
+                Intent intent=new Intent("UPDATE_PLAYER");
+                intent.putExtra("type",7);
+                getContext().sendBroadcast(intent);
+                break;
         }
     }
 
@@ -323,4 +334,24 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
         intent.putExtra("progress",progress*total/100);
         getContext().sendBroadcast(intent);
     }
+    class PlayReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int type=intent.getIntExtra("type",1);
+            switch (type){
+                case 1:
+                    System.out.println("PlayerFragment收到type=1的广播");
+                    String songname=intent.getStringExtra("name");
+                    String songsinger=intent.getStringExtra("singer");
+                    current_duration=intent.getIntExtra("currentDuration",0);
+                    total=intent.getIntExtra("total",0);
+                    tv_title.setText(songname);
+                    tv_artist.setText(songsinger);
+                    iv_play.setSelected(true);
+                    break;
+            }
+
+        }
+    }
+
 }

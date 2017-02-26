@@ -13,6 +13,15 @@ import android.view.ViewGroup;
 import com.szumusic.szumusicapp.R;
 import com.szumusic.szumusicapp.ui.common.SongListAdapter;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+
 
 public class SongListFragment extends Fragment {
 
@@ -48,5 +57,16 @@ public class SongListFragment extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         System.out.println("进入了setUserVisibleHint函数"+getUserVisibleHint());
+        if(!isPrepared){
+            String url="";
+            Map<String, Object> map = new HashMap<String, Object>();
+            final JSONObject jsonObject = new JSONObject(map);
+            System.out.println(jsonObject.toString());
+            OkHttpClient client = new OkHttpClient();
+            FormBody formBody = new FormBody.Builder()
+                    .add("data", jsonObject.toString())
+                    .build();
+            Request request = new Request.Builder().url(url).post(formBody).build();
+        }
     }
 }

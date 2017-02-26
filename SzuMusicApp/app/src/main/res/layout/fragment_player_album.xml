@@ -13,6 +13,8 @@
         app:strokeColor="@color/colorWhite"
         />-->
     <com.szumusic.szumusicapp.ui.widget.AlbumCoverView
+        android:id="@+id/album_cover"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        />
 </LinearLayout>
