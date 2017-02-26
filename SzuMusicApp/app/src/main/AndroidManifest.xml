@@ -50,14 +50,11 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" >
-
-            <!--
             <intent-filter android:label="@string/app_name" >
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            -->
         </activity>
 
         <!-- 首页activity -->
@@ -66,13 +63,7 @@
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" >
 
-            <!--
-            <intent-filter android:label="@string/app_name">
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
         </activity>
         <activity
             android:name=".ui.main.LocalActivity"
@@ -87,11 +78,11 @@
             android:name=".ui.main.Login2Activity"
             android:label="@string/title_activity_login2"
             android:theme="@style/AppTheme.NoActionBar" >
-            <intent-filter android:label="@string/app_name" >
+            <!--<intent-filter android:label="@string/app_name" >
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".ui.main.RegisterActivity"
@@ -102,6 +93,17 @@
             android:name=".ui.main.Register2Activity"
             android:label="@string/title_activity_register"
             android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+
+        <activity
+            android:name=".ui.main.UploadActivity"
+            android:label="@string/title_activity_login2"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <!--<intent-filter android:label="@string/app_name" >
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
         </activity>
     </application>
 

@@ -34,7 +34,7 @@
                     android:text="注册账号"
                     android:layout_centerHorizontal="true"
                     android:textColor="#fff"
-                    android:textSize="25sp" />
+                    android:textSize="20sp" />
 
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
@@ -52,34 +52,10 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:showIn="@layout/activity_register"
         tools:context="com.szumusic.szumusicapp.ui.main.RegisterActivity">
-        <AutoCompleteTextView android:id="@+id/username"
-            android:layout_marginTop="15dp"
-            android:padding="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="用户名"
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:background="@drawable/login_editx"/>
 
-        <EditText android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:padding="8dp"
-            android:hint="密码"
-            android:imeActionId="@+id/login"
-            android:imeActionLabel="@string/action_sign_in_short"
-            android:imeOptions="actionUnspecified"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:background="@drawable/login_editx2"
-            />
         <EditText android:id="@+id/phone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginTop="12dp"
             android:padding="8dp"
             android:hint="手机号"
@@ -90,6 +66,35 @@
             android:singleLine="true"
             android:background="@drawable/login_editx2"
             />
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+            <EditText
+                android:layout_weight="0.9"
+                android:id="@+id/confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:padding="8dp"
+                android:hint="输入验证码"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:background="@drawable/login_editx"
+                android:layout_gravity="center_vertical"/>
+            <Button
+                android:id="@+id/send_confirmnum"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/login_button"
+                android:text="发送验证码"
+                android:textColor="#fff"/>
+        </LinearLayout>
+
 
         <Button android:id="@+id/reg_next"
             style="?android:textAppearanceSmall"
@@ -99,6 +104,7 @@
             android:text="下一步"
             android:textStyle="bold"
             android:background="@drawable/login_button"
-            android:textColor="#fff"/>
+            android:textColor="#fff"
+            />
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

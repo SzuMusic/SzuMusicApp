@@ -1,6 +1,7 @@
 package com.szumusic.szumusicapp.ui.main;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
@@ -24,7 +25,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
  /*   public LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyLocationListener();*/
-
+    private SharedPreferences sp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,14 +41,17 @@ public class MainActivity extends AppCompatActivity {
         setSystemBarTransparent();
         Intent intent=new Intent(MainActivity.this, PlayService.class);
         startService(intent);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent=new Intent(MainActivity.this,HomeActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        },5000);
+        sp=this.getSharedPreferences("userinfo",MODE_PRIVATE);
+        if(sp.getBoolean("isChecked",false)){
+                    Intent intent2=new Intent(MainActivity.this,HomeActivity.class);
+                    startActivity(intent2);
+                    finish();
+        }
+        else {
+                    Intent intent2 = new Intent(MainActivity.this, Login2Activity.class);
+                    startActivity(intent2);
+                    finish();
+        }
     }
 
 
