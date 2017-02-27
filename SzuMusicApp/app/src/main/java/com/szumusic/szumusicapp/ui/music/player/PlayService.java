@@ -44,6 +44,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     RemoteViews contentViews;//Notification的小视图
 
 
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -226,7 +227,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                 playNotification.bigContentView = remoteViews;
             }
 
-            playNotification.contentView=remoteViews;
+            //playNotification.contentView=remoteViews;
         }
         remoteViews.setTextViewText(R.id.title,music.getTitle());
         remoteViews.setTextViewText(R.id.singer,music.getArtist()+"-"+music.getAlbum());

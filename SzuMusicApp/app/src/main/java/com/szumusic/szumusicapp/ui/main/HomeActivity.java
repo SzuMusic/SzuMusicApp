@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -38,6 +39,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -83,6 +85,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     ImageView talk_icon;
     @Bind(R.id.search_edit)
     EditText search_edit;
+    @Bind(R.id.user_name)
+    TextView user_name;
 
     MaterialSpinner spinner_time;
     MaterialSpinner spinner_position;
@@ -90,6 +94,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     MaterialSpinner spinner_state;
     MaterialSpinner spinner_mood;
     TextView tv_position;//用户定位
+    TextView change_msg;
+    private String user_id;
+    private String e_name;
+    private SharedPreferences sp;
 
 
     @Override
@@ -114,6 +122,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
+        sp=this.getSharedPreferences("userinfo",MODE_PRIVATE);
+        user_id=sp.getString("user_id",null);
+        e_name=sp.getString("e_name",null);
+        user_name.setText(e_name);
         ViewPager viewPager = (ViewPager) findViewById(R.id.vp_view);
         MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),
                 this);
@@ -243,11 +255,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     spinner_state= (MaterialSpinner) dialog_view.findViewById(R.id.spinner_state);
                     spinner_mood= (MaterialSpinner) dialog_view.findViewById(R.id.spinner_mood);
                     tv_position= (TextView) dialog_view.findViewById(R.id.tv_position);
+                    change_msg= (TextView) dialog_view.findViewById(R.id.change_msg);
+                    change_msg.setOnClickListener(this);
                     spinner_time.setItems("清晨","上午","午间","下午","夜晚","深夜");
                     spinner_position.setItems("居室","办公室","商店","酒吧","街道","户外","图书馆","室内运功场");
                     spinner_weather.setItems("晴天","阴天","雨天");
-                    spinner_state.setItems("在工作","在休息","在阅读","在路途","在劳务");
-                    spinner_mood.setItems("平静","愉悦","悲伤","兴奋","高兴");
+                    spinner_state.setItems("正常","在工作","在学习","在休息","在路途","在劳务");
+                    spinner_mood.setItems("悲伤","失落","正常","愉悦","兴奋");
                     tv_position.setText("       "+playService.getLocationDescri());
                     dialog=builder.create();
                     dialog.show();
@@ -256,6 +270,19 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.talk_icon:
                 Toast.makeText(getApplicationContext(),"语音识别功能正在开发中，敬请关注",Toast.LENGTH_SHORT).show();
                 System.out.println("点击了语音icon");
+                break;
+            case R.id.change_msg:
+                Intent intent=new Intent("UPDATE_COMMEND");
+                intent.putExtra("type",1);
+                intent.putExtra("userid",user_id);
+                intent.putExtra("time",spinner_time.getSelectedIndex()+1);
+                intent.putExtra("address",spinner_position.getSelectedIndex()+1);
+                intent.putExtra("weather",spinner_weather.getSelectedIndex()+1);
+                intent.putExtra("mood",spinner_mood.getSelectedIndex()+1);
+                intent.putExtra("state",spinner_state.getSelectedIndex()+1);
+                sendBroadcast(intent);
+                System.out.println("time选择的是"+spinner_time.getSelectedIndex()+spinner_time.getText());
+                dialog.hide();
                 break;
         }
     }

@@ -106,10 +106,11 @@ public class Login2Activity extends AppCompatActivity {
             if(statu==1){
                 SharedPreferences.Editor editor = sp.edit(); //获取编辑器
                 editor.putBoolean("isChecked", true);
+                editor.putString("user_id",user_id);
+                editor.putString("e_name",e_name);
                 editor.commit();
                 Intent intent2=new Intent(Login2Activity.this,HomeActivity.class);
-                intent2.putExtra("user_id",user_id);
-                intent2.putExtra("e_name",e_name);
+
                 startActivity(intent2);
             }
             else if(statu==0){

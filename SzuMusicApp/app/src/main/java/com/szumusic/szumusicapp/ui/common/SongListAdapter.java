@@ -2,6 +2,7 @@ package com.szumusic.szumusicapp.ui.common;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,41 +15,55 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.szumusic.szumusicapp.R;
+import com.szumusic.szumusicapp.data.model.Music;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kobe_xuan on 2017/1/28.
  */
 public class SongListAdapter extends RecyclerView.Adapter {
-    private int songcount=0;//歌曲的数量
     private Context context;
     Dialog markDialog=null;//评分的弹框
+    private List<Music> musicList=new ArrayList<Music>();
 
     public SongListAdapter() {
         super();
     }
 
-    public SongListAdapter(Context context,int songcount) {
+    public SongListAdapter(Context context,List<Music> musicList) {
         super();
         this.context=context;
-        this.songcount=songcount;
+        this.musicList=musicList;
     }
 
     class Viewholder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView order_number;
         ImageView btn_mark;
+        LinearLayout content_layout;
+        TextView tv_title;
+        TextView tv_artist;
         public Viewholder(View itemView) {
             super(itemView);
             order_number=(TextView)itemView.findViewById(R.id.order_number);
             btn_mark= (ImageView) itemView.findViewById(R.id.btn_mark);
+            content_layout= (LinearLayout) itemView.findViewById(R.id.content_layout);
+            tv_title= (TextView) itemView.findViewById(R.id.tv_title);
+            tv_artist= (TextView) itemView.findViewById(R.id.tv_artist);
             btn_mark.setOnClickListener(this);
             order_number.setOnClickListener(this);
+            content_layout.setOnClickListener(this);
         }
 
         public TextView getOrder_number(){return order_number;}
+        public TextView getTv_title(){return tv_title;}
+        public TextView getTv_artist(){return tv_artist;}
 
 
         @Override
         public void onClick(View view) {
+            int position = getAdapterPosition();
             switch (view.getId()){
                 case R.id.btn_mark:
                     if(markDialog!=null)
@@ -73,6 +88,16 @@ public class SongListAdapter extends RecyclerView.Adapter {
                         markDialog.show();
                     }
                     break;
+                case R.id.content_layout:
+                    Music music=musicList.get(position);
+                    Intent intent=new Intent("UPDATE_PLAYER");
+                    intent.putExtra("name",music.getTitle());
+                    intent.putExtra("singer",music.getArtist());
+                    intent.putExtra("url",music.getUri());
+                    intent.putExtra("type",1);
+                    intent.putExtra("music",music);
+                    context.sendBroadcast(intent);
+                    break;
 
 
             }
@@ -86,11 +111,14 @@ public class SongListAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Viewholder viewholder = (Viewholder) holder;
+        Music music=musicList.get(position);
         viewholder.getOrder_number().setText(Integer.toString(position+1));
+        viewholder.getTv_title().setText(music.getTitle());
+        viewholder.getTv_artist().setText(music.getArtist()+"-"+music.getAlbum());
     }
 
     @Override
     public int getItemCount() {
-        return songcount;
+        return musicList.size();
     }
 }
