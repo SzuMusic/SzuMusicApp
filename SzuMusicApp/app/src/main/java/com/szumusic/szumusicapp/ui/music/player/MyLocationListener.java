@@ -94,7 +94,8 @@ public class MyLocationListener implements BDLocationListener {
 
         sb.append("\nlocationdescribe : ");
         sb.append(location.getLocationDescribe());    //位置语义化信息
-        poi_position=location.getLocationDescribe();
+        if (location.getLocationDescribe()!=null)
+           poi_position=location.getLocationDescribe();
 
         List<Poi> list = location.getPoiList();    // POI数据
         if (list != null) {

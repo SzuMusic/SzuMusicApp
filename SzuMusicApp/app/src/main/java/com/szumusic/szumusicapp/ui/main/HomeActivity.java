@@ -129,6 +129,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         ViewPager viewPager = (ViewPager) findViewById(R.id.vp_view);
         MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),
                 this);
+        adapter.setUserid(user_id);
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);

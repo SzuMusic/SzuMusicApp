@@ -38,11 +38,11 @@
             android:layout_height="wrap_content"
 
             android:layout_below="@+id/singer"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             >
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:src="@drawable/ic_play_like"
                 android:layout_weight="1"
                 />

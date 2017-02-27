@@ -10,9 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.szumusic.szumusicapp.R;
 import com.szumusic.szumusicapp.data.model.Music;
@@ -73,6 +75,16 @@ public class SongListAdapter extends RecyclerView.Adapter {
                         LinearLayout root = (LinearLayout) LayoutInflater.from(context).inflate(
                                 R.layout.dialog_mark, null);
                         markDialog.setContentView(root);
+                        Button btn_love= (Button) root.findViewById(R.id.btn_love);
+                        Button btn_like= (Button) root.findViewById(R.id.btn_like);
+                        Button btn_normal= (Button) root.findViewById(R.id.btn_normal);
+                        Button btn_dislike= (Button) root.findViewById(R.id.btn_dislike);
+                        Button btn_hate= (Button) root.findViewById(R.id.btn_hate);
+                        btn_love.setOnClickListener(this);
+                        btn_like.setOnClickListener(this);
+                        btn_normal.setOnClickListener(this);
+                        btn_dislike.setOnClickListener(this);
+                        btn_hate.setOnClickListener(this);
                         Window dialogWindow = markDialog.getWindow();
                         dialogWindow.setGravity(Gravity.BOTTOM);
                         dialogWindow.setWindowAnimations(R.style.dialogstyle); // 添加动画
@@ -97,6 +109,52 @@ public class SongListAdapter extends RecyclerView.Adapter {
                     intent.putExtra("type",1);
                     intent.putExtra("music",music);
                     context.sendBroadcast(intent);
+                    Toast.makeText(context,"正在播放歌曲",Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.btn_love:
+                    Intent intent1=new Intent("UPDATE_COMMEND");
+                    intent1.putExtra("type",2);
+                    intent1.putExtra("score",5);
+                    intent1.putExtra("probability",musicList.get(position).getProbability());
+                    intent1.putExtra("musicId",musicList.get(position).getId());
+                    context.sendBroadcast(intent1);
+                    markDialog.hide();
+                    break;
+                case R.id.btn_like:
+                    Intent intent2=new Intent("UPDATE_COMMEND");
+                    intent2.putExtra("type",2);
+                    intent2.putExtra("score",4);
+                    intent2.putExtra("probability",musicList.get(position).getProbability());
+                    intent2.putExtra("musicId",musicList.get(position).getId());
+                    context.sendBroadcast(intent2);
+                    markDialog.hide();
+                    break;
+                case R.id.btn_normal:
+                    Intent intent3=new Intent("UPDATE_COMMEND");
+                    intent3.putExtra("type",2);
+                    intent3.putExtra("score",3);
+                    intent3.putExtra("probability",musicList.get(position).getProbability());
+                    intent3.putExtra("musicId",musicList.get(position).getId());
+                    context.sendBroadcast(intent3);
+                    markDialog.hide();
+                    break;
+                case R.id.btn_dislike:
+                    Intent intent4=new Intent("UPDATE_COMMEND");
+                    intent4.putExtra("type",2);
+                    intent4.putExtra("score",2);
+                    intent4.putExtra("probability",musicList.get(position).getProbability());
+                    intent4.putExtra("musicId",musicList.get(position).getId());
+                    context.sendBroadcast(intent4);
+                    markDialog.hide();
+                    break;
+                case R.id.btn_hate:
+                    Intent intent5=new Intent("UPDATE_COMMEND");
+                    intent5.putExtra("type",2);
+                    intent5.putExtra("score",1);
+                    intent5.putExtra("probability",musicList.get(position).getProbability());
+                    intent5.putExtra("musicId",musicList.get(position).getId());
+                    context.sendBroadcast(intent5);
+                    markDialog.hide();
                     break;
 
 

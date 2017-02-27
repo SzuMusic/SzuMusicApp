@@ -273,6 +273,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     }
     //返回场景信息
     public String getLocationDescri(){
+
         return myListener.getPoi_position();
     }
     //添加music到播放列表

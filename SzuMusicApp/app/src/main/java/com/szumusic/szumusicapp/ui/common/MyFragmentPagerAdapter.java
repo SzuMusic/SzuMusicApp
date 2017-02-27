@@ -18,6 +18,8 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     private String[] titles = new String[]{"首页", "歌单", "好友", "电台","777"};
     private Context context;
 
+    private String userid;
+
     public MyFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.context = context;
@@ -32,6 +34,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
                 return tab1;
             case 1:
                 SongListFragment tab2=new SongListFragment();
+                tab2.setUserid(userid);
                 return tab2;
             case 2:
                 FriendsFragment tab3=new FriendsFragment();
@@ -51,5 +54,9 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return titles[position];
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
     }
 }

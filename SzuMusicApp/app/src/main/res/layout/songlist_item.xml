@@ -41,6 +41,7 @@
         android:orientation="vertical"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp"
+        android:background="@drawable/songlist_item_selector"
         >
 
         <TextView

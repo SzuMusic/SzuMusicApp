@@ -33,6 +33,16 @@ public class Music implements Serializable {
     // 发行日期
     private String year;
 
+    public double getProbability() {
+        return probability;
+    }
+
+    public void setProbability(double probability) {
+        this.probability = probability;
+    }
+
+    private double probability;
+
     public Type getType() {
         return type;
     }

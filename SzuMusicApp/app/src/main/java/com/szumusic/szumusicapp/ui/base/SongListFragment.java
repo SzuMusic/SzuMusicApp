@@ -7,12 +7,14 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.szumusic.szumusicapp.R;
 import com.szumusic.szumusicapp.data.model.Music;
@@ -47,6 +49,13 @@ public class SongListFragment extends Fragment {
     UpdateSongListReceiver updateSongListReceiver;
     private List<Music> musicList=new ArrayList<Music>();
     Handler handler = new Handler();
+    int time;
+    int address;
+    int weather;
+    int mood;
+    int state;
+    String userid;
+
     public SongListFragment() {
 
     }
@@ -89,18 +98,18 @@ public class SongListFragment extends Fragment {
     }
 
     class UpdateSongListReceiver extends BroadcastReceiver {
+
         @Override
-        public void onReceive(Context context, Intent intent) {
-            int type=intent.getIntExtra("type",1);
+        public void onReceive(final Context context, Intent intent) {
+            int type=intent.getIntExtra("type",1);//1表示收到用户主动修改场景信息的广播，2表示收到用户对某一歌曲评分的广播
             System.out.println("UpdateSongListReceiver收到了通知");
             switch (type){
                 case 1:
-                    int time=intent.getIntExtra("time",0);
-                    int weather=intent.getIntExtra("weather",0);
-                    int address=intent.getIntExtra("address",0);
-                    int mood=intent.getIntExtra("mood",0);
-                    int state=intent.getIntExtra("state",0);
-                    String userid=intent.getStringExtra("userid");
+                    time=intent.getIntExtra("time",0);
+                    weather=intent.getIntExtra("weather",0);
+                    address=intent.getIntExtra("address",0);
+                    mood=intent.getIntExtra("mood",0);
+                    state=intent.getIntExtra("state",0);
                     System.out.println(time);
                     String url="http://172.31.69.182:8080/MusicGrade/pRecMusic";
                     Map<String, Object> map = new HashMap<String, Object>();
@@ -120,18 +129,18 @@ public class SongListFragment extends Fragment {
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
-
+                            System.out.println("请求");
                         }
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-
                             String result = new String(response.body().string());
                             try {
                                 JSONObject myjson = new JSONObject(result);
                                 JSONArray musics=myjson.getJSONArray("musics");
                                 JSONObject musicobj;
                                 String[] str;
+                                musicList.clear();
                                 for (int i=0;i<musics.length();i++){
                                     musicobj=musics.getJSONObject(i);
                                     str=musicobj.getString("name").split("-");
@@ -140,6 +149,8 @@ public class SongListFragment extends Fragment {
                                     music.setArtist(str[0]);
                                     music.setAlbum(musicobj.getString("album"));
                                     music.setUri("http://120.27.106.28/musicSource/music/"+musicobj.getString("singerId")+"/"+musicobj.getString("musicId")+".mp3");
+                                    music.setId(musicobj.getLong("musicId"));
+                                    music.setProbability(musicobj.getDouble("probability"));
                                     musicList.add(music);
                                 }
                                 handler.post(new Runnable() {
@@ -155,8 +166,44 @@ public class SongListFragment extends Fragment {
                         }
                     });
                     break;
+                case 2:
+                    String url2="http://172.31.69.182:8080/MusicGrade/pGiveGrade";
+                    Map<String, Object> map2 = new HashMap<String, Object>();
+                    map2.put("time",time);
+                    map2.put("weather",weather);
+                    map2.put("address",address);
+                    map2.put("mood",mood);
+                    map2.put("state",state);
+                    map2.put("userid",userid);
+                    map2.put("musicId",intent.getLongExtra("musicId",0));
+                    map2.put("score",intent.getIntExtra("score",0));
+                    map2.put("probability",intent.getDoubleExtra("probability",0.5));
+                    final JSONObject jsonObject2 = new JSONObject(map2);
+                    System.out.println(jsonObject2.toString());
+                    OkHttpClient client2 = new OkHttpClient();
+                    FormBody formBody2 = new FormBody.Builder()
+                            .add("data", jsonObject2.toString())
+                            .build();
+                    Request request2 = new Request.Builder().url(url2).post(formBody2).build();
+                    client2.newCall(request2).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            System.out.println(response.body().string());
+                            Looper.prepare();
+                            Toast.makeText(getActivity().getApplicationContext(),"评分成功",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    break;
             }
 
         }
+    }
+    public void setUserid(String userid) {
+        this.userid = userid;
     }
 }

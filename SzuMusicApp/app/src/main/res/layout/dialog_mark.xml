@@ -51,7 +51,7 @@
         android:layout_marginTop="8dp"
         />
     <Button
-        android:id="@+id/btn_"
+        android:id="@+id/btn_hate"
         android:layout_width="fill_parent"
         android:layout_height="42dip"
         android:gravity="center"
