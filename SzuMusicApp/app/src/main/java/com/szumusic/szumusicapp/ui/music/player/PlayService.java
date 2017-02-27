@@ -225,7 +225,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 playNotification.bigContentView = remoteViews;
             }
-            contentViews=new RemoteViews(getPackageName(),)
+
             playNotification.contentView=remoteViews;
         }
         remoteViews.setTextViewText(R.id.title,music.getTitle());

@@ -1,6 +1,7 @@
 package com.szumusic.szumusicapp.ui.main;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,7 +36,7 @@ public class Register2Activity extends AppCompatActivity {
 
     private String user_id;
     private String e_name;
-
+    private SharedPreferences sp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +83,9 @@ public class Register2Activity extends AppCompatActivity {
                     String phone_num=getIntent().getStringExtra("phone_num");
                     int statu=regUser(phone_num,temp_username,temp_password);
                     if(statu==1){
+                        SharedPreferences.Editor editor = sp.edit(); //获取编辑器
+                        editor.putBoolean("isChecked", true);
+                        editor.commit();
                         Intent intent2=new Intent(Register2Activity.this,HomeActivity.class);
                         intent2.putExtra("user_id",user_id);
                         intent2.putExtra("e_name",e_name);
