@@ -59,8 +59,8 @@ public class Register2Activity extends AppCompatActivity {
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                 }
-                else if(temp_username.length()<6||temp_username.length()>20){
-                    Toast toast=Toast.makeText(Register2Activity.this, "昵称需要大于5位且小于21位~", Toast.LENGTH_SHORT);
+                else if(temp_username.length()<2||temp_username.length()>20){
+                    Toast toast=Toast.makeText(Register2Activity.this, "昵称需要大于1位且小于21位~", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                 }
@@ -85,10 +85,10 @@ public class Register2Activity extends AppCompatActivity {
                     if(statu==1){
                         SharedPreferences.Editor editor = sp.edit(); //获取编辑器
                         editor.putBoolean("isChecked", true);
+                        editor.putString("user_id",user_id);
+                        editor.putString("e_name",e_name);
                         editor.commit();
                         Intent intent2=new Intent(Register2Activity.this,HomeActivity.class);
-                        intent2.putExtra("user_id",user_id);
-                        intent2.putExtra("e_name",e_name);
                         startActivity(intent2);
                     }
                     else if(statu==0){
