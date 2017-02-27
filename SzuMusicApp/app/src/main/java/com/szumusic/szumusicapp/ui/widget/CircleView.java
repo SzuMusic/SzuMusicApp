@@ -71,28 +71,10 @@ public class CircleView extends ImageView {
         setMeasuredDimension(width,width);
         System.out.println("图片的宽度为"+mDiscBitmap.getWidth());
         System.out.println("屏幕的宽度为"+getMeasuredWidth());
-//        mDiscBitmap = ImageUtils.resizeImage(mDiscBitmap, width,
-//                width);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        //super.onDraw(canvas);
-       /* int r=getMeasuredWidth()/2;
-        int centerX=getLeft()+r;
-        int centerY=getTop()+r;
-        Paint paint=new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.GREEN);
-        paint.setStrokeWidth(4);
-
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        //canvas.drawCircle(centerX,centerY,r/2,paint);
-        Bitmap bitmap= BitmapFactory.decodeResource(getResources(),R.drawable.default_artist);
-
-        //canvas.drawBitmap(bitmap,0,0,paint);
-
-        //canvas.drawText("fasdfaf",centerX,centerY,paint);
-        System.out.println("半径为"+r+"坐标为"+centerX+"===="+centerY);*/
 
         if (getDrawable()==null)
             return;
@@ -100,8 +82,6 @@ public class CircleView extends ImageView {
         canvas.drawCircle(width/2,width/2,mradius,mBitmapPaint);
         setmBorderPaint();
         canvas.drawCircle(width/2,width/2,mradius,mBorderPaint);
-        //下面画专辑
-        //canvas.drawBitmap(mDiscBitmap,0,0,null);
     }
 
     private void setBitmapShader(){

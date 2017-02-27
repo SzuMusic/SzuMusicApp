@@ -1,6 +1,8 @@
 package com.szumusic.szumusicapp.ui.base;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -58,7 +60,7 @@ public class SongListFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         System.out.println("进入了setUserVisibleHint函数"+getUserVisibleHint());
         if(!isPrepared){
-            String url="";
+            /*String url="";
             Map<String, Object> map = new HashMap<String, Object>();
             final JSONObject jsonObject = new JSONObject(map);
             System.out.println(jsonObject.toString());
@@ -66,7 +68,20 @@ public class SongListFragment extends Fragment {
             FormBody formBody = new FormBody.Builder()
                     .add("data", jsonObject.toString())
                     .build();
-            Request request = new Request.Builder().url(url).post(formBody).build();
+            Request request = new Request.Builder().url(url).post(formBody).build();*/
+        }
+    }
+
+    class UpdateSongListReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int type=intent.getIntExtra("type",1);
+            switch (type){
+                case 1:
+
+                    break;
+            }
+
         }
     }
 }

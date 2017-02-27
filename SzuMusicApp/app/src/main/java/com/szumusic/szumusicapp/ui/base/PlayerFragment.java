@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.szumusic.szumusicapp.R;
 import com.szumusic.szumusicapp.ui.common.PlayPagerAdapter;
+import com.szumusic.szumusicapp.ui.widget.AlbumCoverView;
 import com.szumusic.szumusicapp.ui.widget.IndicatorLayout;
 import com.szumusic.szumusicapp.utils.Bind;
 import com.szumusic.szumusicapp.utils.ScreenUtils;
@@ -53,6 +54,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
     SeekBar sb_progress;
     @Bind(R.id.iv_next)
     ImageView iv_next;
+    private AlbumCoverView mAlbumCoverView;
 
     String title;//歌名
     String singer;//歌手
@@ -175,6 +177,10 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
         iv_next.setOnClickListener(this);
         tv_title.setText(title);
         iv_play.setSelected(isPlaying);
+        if (isPlaying)
+            mAlbumCoverView.start();
+        else
+           mAlbumCoverView.pause();
         tv_artist.setText(singer);
         System.out.println(total);
         total_minute= (int) (total/60000);
@@ -190,7 +196,8 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
     private void initViewPager() {
         View coverView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_player_album, null);
         View lrcView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_play_page_lrc, null);
-
+        mAlbumCoverView= (AlbumCoverView) coverView.findViewById(R.id.album_cover);
+        mAlbumCoverView.start();
         mViewPagerContent = new ArrayList<>(2);
         mViewPagerContent.add(coverView);
         mViewPagerContent.add(lrcView);
@@ -236,11 +243,15 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
         System.out.println("执行到了onHiddenChanged的函数");
         if(!hidden){
             tv_title.setText(title);
-            iv_play.setSelected(true);
+            //iv_play.setSelected(true);
             tv_artist.setText(singer);
             total_minute= (int) (total/60000);
             total_second= (int) (total%60000)/1000;
             iv_play.setSelected(isPlaying);
+            if (isPlaying)
+                mAlbumCoverView.start();
+            else
+               mAlbumCoverView.pause();
             if (total_second<10)
                 tv_total_time.setText("0"+total_minute+":0"+total_second);
             else
@@ -267,6 +278,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
                     intent.putExtra("type",2);
                     getContext().sendBroadcast(intent);
                     iv_play.setSelected(false);
+                    mAlbumCoverView.pause();
                     timerTask.cancel();
                     timer.cancel();
                 }else{
@@ -274,6 +286,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
                     intent.putExtra("type",3);
                     getContext().sendBroadcast(intent);
                     iv_play.setSelected(true);
+                    mAlbumCoverView.start();
                     timer=new Timer();
                     timerTask=new TimerTask() {
                         @Override
@@ -348,6 +361,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
                     tv_title.setText(songname);
                     tv_artist.setText(songsinger);
                     iv_play.setSelected(true);
+                    mAlbumCoverView.start();
                     break;
             }
 

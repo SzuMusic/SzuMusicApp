@@ -40,7 +40,8 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     PlayServiceReceiver playServiceReceiver =new PlayServiceReceiver();
     Notification playNotification=null;
     NotificationManager notificationManager;
-    RemoteViews remoteViews;
+    RemoteViews remoteViews;//Notification的大视图
+    RemoteViews contentViews;//Notification的小视图
 
 
     @Override
@@ -224,6 +225,8 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 playNotification.bigContentView = remoteViews;
             }
+            contentViews=new RemoteViews(getPackageName(),)
+            playNotification.contentView=remoteViews;
         }
         remoteViews.setTextViewText(R.id.title,music.getTitle());
         remoteViews.setTextViewText(R.id.singer,music.getArtist()+"-"+music.getAlbum());
