@@ -2,6 +2,7 @@ package com.szumusic.szumusicapp.ui.main;
 
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,6 +44,7 @@ public class Login2Activity extends AppCompatActivity {
     private TextView reg;
     private LinearLayout login_layout;
     private float mScreenHeight;
+    private SharedPreferences sp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +55,13 @@ public class Login2Activity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
         mScreenHeight = outMetrics.heightPixels;
         imageRun();
+
+        sp=this.getSharedPreferences("userinfo",MODE_PRIVATE);
+        if(sp.getBoolean("isChecked",false)){
+            Intent intent2=new Intent(Login2Activity.this,HomeActivity.class);
+            startActivity(intent2);
+            finish();
+        }
 
         username= (EditText) findViewById(R.id.username);
         password=(EditText)findViewById(R.id.password);
@@ -93,9 +102,11 @@ public class Login2Activity extends AppCompatActivity {
             toast.show();
         }
         else{
-            String phone_num=getIntent().getStringExtra("phone_num");
             int statu=sendUserAndPsw(temp_username,temp_password);
             if(statu==1){
+                SharedPreferences.Editor editor = sp.edit(); //获取编辑器
+                editor.putBoolean("isChecked", true);
+                editor.commit();
                 Intent intent2=new Intent(Login2Activity.this,HomeActivity.class);
                 intent2.putExtra("user_id",user_id);
                 intent2.putExtra("e_name",e_name);

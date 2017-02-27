@@ -58,7 +58,7 @@ public class SongListFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         System.out.println("进入了setUserVisibleHint函数"+getUserVisibleHint());
         if(!isPrepared){
-            String url="";
+            /*String url="";
             Map<String, Object> map = new HashMap<String, Object>();
             final JSONObject jsonObject = new JSONObject(map);
             System.out.println(jsonObject.toString());
@@ -66,7 +66,7 @@ public class SongListFragment extends Fragment {
             FormBody formBody = new FormBody.Builder()
                     .add("data", jsonObject.toString())
                     .build();
-            Request request = new Request.Builder().url(url).post(formBody).build();
+            Request request = new Request.Builder().url(url).post(formBody).build();*/
         }
     }
 }

@@ -186,6 +186,7 @@ public class RegisterActivity extends AppCompatActivity {
                         toast.show();
                     }
                     else if(str2.equals("2")){
+                        Looper.prepare();
                         Toast toast=Toast.makeText(RegisterActivity.this, "该手机号已被注册，请直接登录~", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
