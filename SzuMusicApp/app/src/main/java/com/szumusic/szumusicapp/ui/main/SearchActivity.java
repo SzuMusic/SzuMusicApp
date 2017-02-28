@@ -1,5 +1,9 @@
 package com.szumusic.szumusicapp.ui.main;
 
+import android.annotation.TargetApi;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -16,9 +20,29 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.szumusic.szumusicapp.R;
+import com.szumusic.szumusicapp.data.model.Music;
+import com.szumusic.szumusicapp.ui.base.SearchSongFragment;
 import com.szumusic.szumusicapp.ui.common.SearchFragmentPagerAdapter;
+import com.szumusic.szumusicapp.ui.music.player.PlayService;
 import com.szumusic.szumusicapp.utils.Bind;
 import com.szumusic.szumusicapp.utils.ViewBinder;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -26,6 +50,9 @@ public class SearchActivity extends AppCompatActivity {
     ViewPager vp_view;
     @Bind(R.id.search_edit)
     EditText search_edit;
+    SearchSongFragment searchSongFragment;
+    String key;
+    private List<Music> musicList=new ArrayList<Music>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +70,15 @@ public class SearchActivity extends AppCompatActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
+
+       Intent intent=getIntent();
+        key=intent.getStringExtra("key");
+        System.out.println("key为"+key);
         //下面是各控件的初始化部分
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        SearchFragmentPagerAdapter searchFragmentPagerAdapter=new SearchFragmentPagerAdapter(getSupportFragmentManager(),this);
+        final SearchFragmentPagerAdapter searchFragmentPagerAdapter=new SearchFragmentPagerAdapter(getSupportFragmentManager(),this,musicList);
         vp_view.setAdapter(searchFragmentPagerAdapter);
+        searchSongFragment= (SearchSongFragment) searchFragmentPagerAdapter.getItem(0);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(vp_view);
         search_edit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -71,6 +103,65 @@ public class SearchActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        //异步执行后台初始化
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                System.out.println("执行了SearchActivity的asyncTask函数");
+                String url="http://172.31.69.182:8080/MusicGrade/pSearchMusics";
+                OkHttpClient client = new OkHttpClient();
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("findKey",key);
+
+                final JSONObject jsonObject = new JSONObject(map);
+                FormBody formBody = new FormBody.Builder()
+                        .add("data",jsonObject.toString())
+                        .build();
+                Request request = new Request.Builder().url(url).post(formBody).build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                         String result=response.body().string();
+                        System.out.println(result);
+                        try {
+                            JSONObject myjson=new JSONObject(result);
+                            JSONArray musics=myjson.getJSONArray("musics");
+                            JSONObject musicobj;
+                            String[] str;
+                            for (int i=0;i<musics.length();i++){
+                                musicobj=musics.getJSONObject(i);
+                                str=musicobj.getString("name").split("-");
+                                Music music=new Music();
+                                music.setTitle(str[1]);
+                                music.setArtist(str[0]);
+                                music.setAlbum(musicobj.getString("album"));
+                                music.setUri("http://120.27.106.28/musicSource/music/"+musicobj.getString("singerId")+"/"+musicobj.getString("musicId")+".mp3");
+                                music.setId(musicobj.getLong("musicId"));
+                                music.setProbability(musicobj.getDouble("probability"));
+                                musicList.add(music);
+                            }
+                            searchSongFragment.setMusicList(musicList);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                return null;
+            }
+
+            @TargetApi(Build.VERSION_CODES.M)
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+
+            }
+        }.execute();
     }
 
     @Override

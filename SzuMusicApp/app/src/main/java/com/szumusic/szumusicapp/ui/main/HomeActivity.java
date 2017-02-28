@@ -144,10 +144,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         search_edit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i == EditorInfo.IME_ACTION_SEND || (keyEvent != null && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                if ((i == EditorInfo.IME_ACTION_SEND || (keyEvent != null && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER))&&!search_edit.getText().equals("")) {
                     System.out.println("监听到了回车事件");
                     Intent intent=new Intent(HomeActivity.this,SearchActivity.class);
-                    intent.putExtra("key",search_edit.getText());
+                    intent.putExtra("key",search_edit.getText().toString());
+                    System.out.println("放进去的key 为"+search_edit.getText());
                     startActivity(intent);
                     return true;
                 }

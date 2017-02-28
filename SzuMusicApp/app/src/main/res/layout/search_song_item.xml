@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp"
+    android:background="@drawable/songlist_item_selector"
+    android:id="@+id/content_layout"
     >
     <TextView
         android:id="@+id/title"
