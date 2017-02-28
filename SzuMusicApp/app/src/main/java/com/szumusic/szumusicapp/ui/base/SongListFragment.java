@@ -111,7 +111,7 @@ public class SongListFragment extends Fragment {
                     mood=intent.getIntExtra("mood",0);
                     state=intent.getIntExtra("state",0);
                     System.out.println(time);
-                    String url="http://172.31.69.182:8080/MusicGrade/pRecMusic";
+                    String url="http://120.27.106.28/MusicGrade/pRecMusic";
                     Map<String, Object> map = new HashMap<String, Object>();
                     map.put("time",time);
                     map.put("weather",weather);
@@ -167,7 +167,7 @@ public class SongListFragment extends Fragment {
                     });
                     break;
                 case 2:
-                    String url2="http://172.31.69.182:8080/MusicGrade/pGiveGrade";
+                    String url2="http://120.27.106.28:8080/MusicGrade/pGiveGrade";
                     Map<String, Object> map2 = new HashMap<String, Object>();
                     map2.put("time",time);
                     map2.put("weather",weather);

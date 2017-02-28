@@ -113,7 +113,7 @@ public class Register2Activity extends AppCompatActivity {
         new Thread(new Runnable(){
             @Override
             public void run() {
-                String url="http://172.31.69.182:8080/MusicGrade/regUser";
+                String url="http://120.27.106.28/MusicGrade/regUser";
                 HttpURLConnection connection=null;
                 try {
                     URL httpUrl=new URL(url);

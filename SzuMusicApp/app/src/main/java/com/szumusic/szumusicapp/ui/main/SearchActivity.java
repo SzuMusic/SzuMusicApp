@@ -109,7 +109,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... params) {
                 System.out.println("执行了SearchActivity的asyncTask函数");
-                String url="http://172.31.69.182:8080/MusicGrade/pSearchMusics";
+                String url="http://120.27.106.28/MusicGrade/pSearchMusics";
                 OkHttpClient client = new OkHttpClient();
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("findKey",key);

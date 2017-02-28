@@ -126,7 +126,7 @@ public class UploadActivity extends Activity {
 	 *
 	 * @param
 	 *
-	 * @param picdata
+	 * @param
 	 */
 	protected void setImageToView(Intent data) {
 		Bundle extras = data.getExtras();
