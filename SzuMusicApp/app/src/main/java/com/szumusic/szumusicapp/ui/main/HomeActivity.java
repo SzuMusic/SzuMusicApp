@@ -1,6 +1,5 @@
 package com.szumusic.szumusicapp.ui.main;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -9,39 +8,32 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.graphics.Rect;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
-import android.transition.Transition;
-import android.transition.TransitionValues;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -53,15 +45,19 @@ import com.szumusic.szumusicapp.data.model.Music;
 import com.szumusic.szumusicapp.ui.base.PlayerFragment;
 import com.szumusic.szumusicapp.ui.common.MyFragmentPagerAdapter;
 import com.szumusic.szumusicapp.ui.common.SettingListAdapter;
-import com.szumusic.szumusicapp.ui.common.SongListAdapter;
 import com.szumusic.szumusicapp.ui.music.player.PlayService;
 import com.szumusic.szumusicapp.utils.Bind;
+import com.szumusic.szumusicapp.utils.ImageUtils;
 import com.szumusic.szumusicapp.utils.ScreenUtils;
 import com.szumusic.szumusicapp.utils.ViewBinder;
 
-import java.util.List;
+import java.io.IOException;
 
-import kr.co.namee.permissiongen.PermissionGen;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, ServiceConnection {
 
@@ -87,7 +83,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     EditText search_edit;
     @Bind(R.id.user_name)
     TextView user_name;
-
+    @Bind(R.id.iv_play_bar_cover)
+    ImageView iv_play_bar_cover;
     MaterialSpinner spinner_time;
     MaterialSpinner spinner_position;
     MaterialSpinner spinner_weather;
@@ -98,6 +95,19 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private String user_id;
     private String e_name;
     private SharedPreferences sp;
+    Bitmap coverBg;
+    Handler handlerImg=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 0:
+                    Bitmap bmp=(Bitmap)msg.obj;
+                    iv_play_bar_cover.setImageBitmap(bmp);
+                    coverBg= ImageUtils.blur(bmp,ImageUtils.BLUR_RADIUS);
+                    break;
+            }
+        }
+    };
 
 
     @Override
@@ -225,6 +235,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 System.out.println("从service获得的进度为"+playService.getCurrentDuration());
                 playerFragment.setCurrent_duration( playService.getCurrentDuration());
                 playerFragment.setIsplaying(playService.getState());
+                if (coverBg!=null)
+                    playerFragment.setBlackground(coverBg);
                 ft.commit();
                 isPlayFragmentShow=true;
                 break;
@@ -322,16 +334,41 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            System.out.println("HomeActivity接受到了广播");
             int type=intent.getIntExtra("type",1);//1表示添加新的歌曲到播放列表。3、2表示播放暂停事件,4表示更新进度,5表示监听到播放完成后自动播放下一首,6表示增加歌曲到播放列表，7表示向service请求下一首
+            System.out.println("HomeActivity接受到了广播type："+type);
             switch (type){
                 case 1:
                     Music music= (Music) intent.getSerializableExtra("music");
+                    playService.playMusic(music);
                     tv_play_bar_title.setText(music.getTitle());
                     tv_play_bar_artist.setText(music.getArtist()+"-"+music.getAlbum());
                     iv_play_bar_play.setSelected(true);
-                    playService.playMusic(music);
-                    //playService.addMusic(music);
+                    tv_play_bar_title.setText(music.getTitle());
+                    tv_play_bar_artist.setText(music.getArtist()+"-"+music.getAlbum());
+                    iv_play_bar_play.setSelected(true);
+                    if(music.getCoverUri()!=null){
+                        System.out.println("专辑封面url为："+music.getCoverUri());
+                        OkHttpClient imgClient=new OkHttpClient();
+                        Request imgRequest=new Request.Builder().url("https:"+music.getCoverUri()).build();
+                        imgClient.newCall(imgRequest).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                System.out.println("下载图片成功");
+                                byte[] bytes = response.body().bytes();
+                                Bitmap bmp= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                                Message msg=new Message();
+                                msg.what=0;
+                                msg.obj=bmp;
+                                handlerImg.sendMessage(msg);
+
+                            }
+                        });
+                    }
                     break;
                 case 2:
                     playService.pause();
@@ -346,7 +383,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     playService.setProgress(progress);
                     break;
                 case 5:
-                    System.out.println("HomeActivity收到type=5的广播");
                     String songname=intent.getStringExtra("name");
                     String songsinger=intent.getStringExtra("singer");
                     tv_play_bar_title.setText(songname);
@@ -354,11 +390,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     iv_play_bar_play.setSelected(true);
                     break;
                 case 6:
-                    System.out.println("收到type=6的广播");
                     Music music1= (Music) intent.getSerializableExtra("music");
                     playService.addMusic(music1);
                     break;
                 case 7:
+                    System.out.println("HomeActivity调用了playService的next函数");
                     playService.next();
                     break;
             }

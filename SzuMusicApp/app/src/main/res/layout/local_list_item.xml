@@ -45,6 +45,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp"
         android:clickable="true"
+        android:background="@drawable/songlist_item_selector"
         >
 
         <TextView

@@ -111,6 +111,7 @@ public class Login2Activity extends AppCompatActivity {
                 editor.commit();
                 Intent intent2=new Intent(Login2Activity.this,HomeActivity.class);
                 startActivity(intent2);
+                finish();
             }
             else if(statu==0){
                 Toast toast=Toast.makeText(Login2Activity.this, "请输入正确的手机号或密码~~", Toast.LENGTH_SHORT);
@@ -217,6 +218,7 @@ public class Login2Activity extends AppCompatActivity {
     private void reg() {
         Intent intent2=new Intent(Login2Activity.this,RegisterActivity.class);
         startActivity(intent2);
+        finish();
         //Login2Activity.this.finish();
     }
 

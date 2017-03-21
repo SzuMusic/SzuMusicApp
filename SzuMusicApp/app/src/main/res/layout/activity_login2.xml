@@ -57,7 +57,7 @@
             android:padding="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="用户名"
+            android:hint="请输入手机号"
             android:inputType="textEmailAddress"
             android:maxLines="1"
             android:singleLine="true"
@@ -85,7 +85,7 @@
             android:layout_marginTop="16dp"
             android:text="立即登录"
             android:textStyle="bold"
-            android:background="@drawable/login_button"
+            android:background="@drawable/login_btn_selector"
             android:textColor="#fff"/>
         <RelativeLayout
             android:layout_width="match_parent"

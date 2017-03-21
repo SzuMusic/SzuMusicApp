@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayService extends Service implements MediaPlayer.OnCompletionListener {
+public class PlayService extends Service implements MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener {
     private static int NOTIFICATE_ID=2017;
     private MediaPlayer mediaPlayer=new MediaPlayer();
     private LocationClient mLocationClient = null;
@@ -42,6 +42,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     NotificationManager notificationManager;
     RemoteViews remoteViews;//Notification的大视图
     RemoteViews contentViews;//Notification的小视图
+    boolean isLoading=true;//判断是否正在加载资源
 
 
 
@@ -63,6 +64,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         registerReceiver(playServiceReceiver,intentFilter);
         //registerReceiver(playServiceReceiver,intentFilter_outCall);
         notificationManager= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mediaPlayer.setOnPreparedListener(this);
 
     }
 
@@ -104,18 +106,22 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     }
 
     @Override
-    public void onCompletion(MediaPlayer mediaPlayer) {
+    public void onCompletion(MediaPlayer MymediaPlayer) {
         System.out.println("进入了播放结束的函数");
-        playNext(mediaPlayer);
+        //playNext();
+        if(!isLoading)
+            playNext();
+
     }
 
-    //播放下一首(共有方法，不带参数，只供调用)
+    //播放下一首(共有方法)
     public void next(){
-       playNext(mediaPlayer);
+       playNext();
     }
 
-    //播放下一首(私有方法，带参数)
-    private void playNext(MediaPlayer mediaPlayer) {
+    //播放下一首(私有方法)
+    private void playNext() {
+        System.out.println("进入了playNext函数");
         songPosition++;
         System.out.println("songPosition为"+songPosition);
         System.out.println("musicList的size为"+musicList.size());
@@ -130,8 +136,10 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         mediaPlayer.reset();
         try {
             mediaPlayer.setDataSource(music.getUri());
-            mediaPlayer.prepare();
-            mediaPlayer.start();
+            mediaPlayer.prepareAsync();
+            isLoading=true;
+            //mediaPlayer.prepare();
+            //mediaPlayer.start();
             Intent playFragment=new Intent("UPDATE_FRAGMENT");
             playFragment.putExtra("type",1);
             playFragment.putExtra("name",music.getTitle());
@@ -164,8 +172,10 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         mediaPlayer.reset();
         try {
             mediaPlayer.setDataSource(music.getUri());
-            mediaPlayer.prepare();
-            mediaPlayer.start();
+            mediaPlayer.prepareAsync();
+            isLoading=true;
+            //mediaPlayer.prepare();
+            //mediaPlayer.start();
             Intent playFragment=new Intent("UPDATE_FRAGMENT");
             playFragment.putExtra("type",1);
             playFragment.putExtra("name",music.getTitle());
@@ -182,6 +192,14 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         notificationManager.notify(NOTIFICATE_ID,playNotification);
     }
 
+    //异步准备音乐
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        System.out.println("进入了异步播放函数");
+        mediaPlayer.start();
+        isLoading=false;
+    }
+
     public class PlayBinder extends Binder {
 
         public PlayService getService() {
@@ -196,8 +214,10 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         mediaPlayer.reset();
         try {
             mediaPlayer.setDataSource(music.getUri());
-            mediaPlayer.prepare();
-            mediaPlayer.start();
+            mediaPlayer.prepareAsync();
+            isLoading=true;
+            //mediaPlayer.prepare();
+            //mediaPlayer.start();
         } catch (IOException e) {
             e.printStackTrace();
         }

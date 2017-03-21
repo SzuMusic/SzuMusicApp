@@ -135,6 +135,7 @@ public class SongListFragment extends Fragment {
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             String result = new String(response.body().string());
+                            System.out.println(result);
                             try {
                                 JSONObject myjson = new JSONObject(result);
                                 JSONArray musics=myjson.getJSONArray("musics");
@@ -148,6 +149,7 @@ public class SongListFragment extends Fragment {
                                     music.setTitle(str[1]);
                                     music.setArtist(str[0]);
                                     music.setAlbum(musicobj.getString("album"));
+                                    music.setCoverUri(musicobj.getString("imageUrl"));
                                     music.setUri("http://120.27.106.28/musicSource/music/"+musicobj.getString("singerId")+"/"+musicobj.getString("musicId")+".mp3");
                                     music.setId(musicobj.getLong("musicId"));
                                     music.setProbability(musicobj.getDouble("probability"));
@@ -167,7 +169,7 @@ public class SongListFragment extends Fragment {
                     });
                     break;
                 case 2:
-                    String url2="http://120.27.106.28:8080/MusicGrade/pGiveGrade";
+                    String url2="http://120.27.106.28/MusicGrade/pGiveGrade";
                     Map<String, Object> map2 = new HashMap<String, Object>();
                     map2.put("time",time);
                     map2.put("weather",weather);
@@ -188,7 +190,7 @@ public class SongListFragment extends Fragment {
                     client2.newCall(request2).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
-
+                            System.out.println("没收到响应");
                         }
 
                         @Override

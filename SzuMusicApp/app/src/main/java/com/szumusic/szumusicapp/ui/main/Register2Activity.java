@@ -90,6 +90,7 @@ public class Register2Activity extends AppCompatActivity {
                         editor.commit();
                         Intent intent2=new Intent(Register2Activity.this,HomeActivity.class);
                         startActivity(intent2);
+                        finish();
                     }
                     else if(statu==0){
                         Toast toast=Toast.makeText(Register2Activity.this, "该用户名已被占用，请更换~~", Toast.LENGTH_SHORT);

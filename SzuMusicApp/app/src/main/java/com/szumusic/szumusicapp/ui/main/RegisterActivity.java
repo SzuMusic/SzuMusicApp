@@ -28,7 +28,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class RegisterActivity extends AppCompatActivity {
-    private static int repeat_time=5;
+    private static int repeat_time=30;
     private EditText phone;
     private Button send_confirm;
     private EditText confirm_num;
@@ -120,6 +120,7 @@ public class RegisterActivity extends AppCompatActivity {
                         Intent intent2 = new Intent(RegisterActivity.this, Register2Activity.class);
                         intent2.putExtra("phone_num", phone_num);
                         startActivity(intent2);
+                        finish();
                     } else if(statu==0) {
                         Toast toast = Toast.makeText(RegisterActivity.this, "验证码错误~~", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -54,6 +55,8 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
     SeekBar sb_progress;
     @Bind(R.id.iv_next)
     ImageView iv_next;
+    @Bind(R.id.iv_play_page_bg)
+    ImageView iv_play_page_bg;
     private AlbumCoverView mAlbumCoverView;
 
     String title;//歌名
@@ -66,6 +69,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
     int current_second;//当前面秒
     Handler handler=new Handler();
     Timer timer=new Timer();
+    Bitmap coverBg;//背景
     TimerTask timerTask=new TimerTask() {
         @Override
         public void run() {
@@ -177,6 +181,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
         iv_next.setOnClickListener(this);
         tv_title.setText(title);
         iv_play.setSelected(isPlaying);
+
         if (isPlaying)
             mAlbumCoverView.start();
         else
@@ -248,6 +253,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
             total_minute= (int) (total/60000);
             total_second= (int) (total%60000)/1000;
             iv_play.setSelected(isPlaying);
+            iv_play_page_bg.setImageBitmap(coverBg);
             if (isPlaying)
                 mAlbumCoverView.start();
             else
@@ -346,6 +352,11 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
         intent.putExtra("type",4);
         intent.putExtra("progress",progress*total/100);
         getContext().sendBroadcast(intent);
+    }
+    //设置背景
+    public void setBlackground(Bitmap bmp){
+        System.out.println("进入了设置背景的函数");
+        coverBg=bmp;
     }
     class PlayReceiver extends BroadcastReceiver {
         @Override
