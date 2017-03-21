@@ -43,7 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-       // setSystemBarTransparent();
+       setSystemBarTransparent();
         reg_next= (Button) findViewById(R.id.reg_next);
         send_confirm=(Button)findViewById(R.id.send_confirmnum);
         phone=(EditText)findViewById(R.id.phone);

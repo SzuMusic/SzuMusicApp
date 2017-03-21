@@ -105,7 +105,7 @@ public class Register2Activity extends AppCompatActivity {
                 }
             }
         });
-       // setSystemBarTransparent();
+        setSystemBarTransparent();
     }
 
     private int regUser(final String phone_num,final String temp_username, final String temp_password) {
