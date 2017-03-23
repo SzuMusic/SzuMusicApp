@@ -41,9 +41,6 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-       setSystemBarTransparent();
         reg_next= (Button) findViewById(R.id.reg_next);
         send_confirm=(Button)findViewById(R.id.send_confirmnum);
         phone=(EditText)findViewById(R.id.phone);
@@ -59,44 +56,48 @@ public class RegisterActivity extends AppCompatActivity {
                     toast.show();
                 }
                 else {
-                    send_confirm.setEnabled(false);
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            send_confirm.setBackgroundColor(getResources().getColor(R.color.grey));
-                        }
-                    });
 
-                    sendPhoneNum();
-                    new Thread(new Runnable() {
-                        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-                        @Override
-                        public void run() {
-                            for (int i = 1; i <= repeat_time; i++) {
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                final int finalI = i;
+
+                    int statu=sendPhoneNum();
+                    if(statu==1) {
+                        new Thread(new Runnable() {
+                            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+                            @Override
+                            public void run() {
+
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        send_confirm.setText((repeat_time- finalI) + " s后重发");
+                                        send_confirm.setEnabled(false);
+                                        send_confirm.setBackgroundColor(getResources().getColor(R.color.grey));
+                                    }
+                                });
+                                for (int i = 1; i <= repeat_time; i++) {
+                                    try {
+                                        Thread.sleep(1000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    final int finalI = i;
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            send_confirm.setText((repeat_time - finalI) + " s后重发");
+                                        }
+                                    });
+                                }
+
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        send_confirm.setEnabled(true);
+                                        send_confirm.setText("发送验证码");
+                                        send_confirm.setBackground(getResources().getDrawable(R.drawable.login_button));
                                     }
                                 });
                             }
-
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    send_confirm.setEnabled(true);
-                                    send_confirm.setText("发送验证码");
-                                    send_confirm.setBackground(getResources().getDrawable(R.drawable.login_button));
-                                }
-                            });
-                        }
-                    }).start();
+                        }).start();
+                    }
                 }
             }
         });
@@ -116,16 +117,16 @@ public class RegisterActivity extends AppCompatActivity {
                 } else {
                     int statu = sendConfirmNum(phone_num, temp);
                     System.out.println("statu====" + statu);
-                    if (statu==1) {
+                    if (statu == 1) {
                         Intent intent2 = new Intent(RegisterActivity.this, Register2Activity.class);
                         intent2.putExtra("phone_num", phone_num);
                         startActivity(intent2);
                         finish();
-                    } else if(statu==0) {
+                    } else if (statu == 0) {
                         Toast toast = Toast.makeText(RegisterActivity.this, "验证码错误~~", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
-                    }else if(statu==2) {
+                    } else if (statu == 2) {
                         Toast toast = Toast.makeText(RegisterActivity.this, "请检查你的网络是否连接~~", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
@@ -136,11 +137,14 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    private void sendPhoneNum() {
+    private int sendPhoneNum() {
+        final int[] statu = new int[1];
+        statu[0]=0;
+        final boolean[] isEnded = {false};
         new Thread(new Runnable(){
             @Override
             public void run() {
-                String url="http://120.27.106.28/MusicGrade/getPhone";
+                String url="http://172.31.69.182:8080/MusicGrade/getPhone";
                 HttpURLConnection connection=null;
                 try {
                     URL httpUrl=new URL(url);
@@ -176,22 +180,41 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                     System.out.println("sessionid===" + sessionId);
                     if(str2.equals("1")){
-                        Looper.prepare();
-                        Toast toast=Toast.makeText(getApplicationContext(), "验证码已发送~", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
+                        statu[0]=1;
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast toast=Toast.makeText(getApplicationContext(), "验证码已发送~", Toast.LENGTH_SHORT);
+                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                toast.show();
+                            }
+                        });
                     }
                     else if(str2.equals("0")){
-                        Toast toast=Toast.makeText(RegisterActivity.this, "验证码发送失败，请点击重发~", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast toast=Toast.makeText(RegisterActivity.this, "验证码发送失败，请点击重发~", Toast.LENGTH_SHORT);
+                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                toast.show();
+                            }
+                        });
                     }
                     else if(str2.equals("2")){
-                        Looper.prepare();
-                        Toast toast=Toast.makeText(RegisterActivity.this, "该手机号已被注册，请直接登录~", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
+
+                        System.out.println("该手机号已被注册，请直接登录======");
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast toast = Toast.makeText(RegisterActivity.this, "该手机号已被注册，请直接登录~", Toast.LENGTH_LONG);
+                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                toast.show();
+                            }
+                        });
+
                     }
+                    isEnded[0]=true;
                 }  catch (Exception e) {
                     System.out.println("===点击接收验证码抛出错误===");
                     e.printStackTrace();
@@ -202,7 +225,19 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         }).start();
-
+        int times=20;
+        while (!isEnded[0]){
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if(times--<=0){
+                statu[0]=2;
+                break;
+            }
+        }
+        return statu[0];
     }
 
     private int sendConfirmNum(final String phone_num,final String confirm_num) {
@@ -211,7 +246,7 @@ public class RegisterActivity extends AppCompatActivity {
         new Thread(new Runnable(){
             @Override
             public void run() {
-                String url="http://120.27.106.28/MusicGrade/sendConfirmNum";
+                String url="http://172.31.69.182:8080/MusicGrade/sendConfirmNum";
                 HttpURLConnection connection=null;
                 try {
                     URL httpUrl=new URL(url);
@@ -229,20 +264,19 @@ public class RegisterActivity extends AppCompatActivity {
                     jsonObject.put("phone_num", phone_num);
                     jsonObject.put("confirm_num", confirm_num);
                     String param="data="+jsonObject.toString();
-                    System.out.println("===点击继续游戏后，传入的数据==" + param);
                     connection.connect();
                     DataOutputStream outputStream=new DataOutputStream(connection.getOutputStream());
                     outputStream.writeBytes(param);
                     outputStream.flush();
                     outputStream.close();
-                    System.out.println("===点击继续游戏后，传入的数据==" + param);
+                    System.out.println("===点击注册下一步后，传入的数据==" + param);
                     BufferedReader reader=new BufferedReader(new InputStreamReader(connection.getInputStream()));
                     StringBuffer sb=new StringBuffer();
                     String s;
                     while ((s=reader.readLine())!=null){
                         sb.append(s);
                     }
-                    System.out.println("===点击继续游戏后，接受的数据=="+sb);
+                    System.out.println("===点击注册下一步后，接受的数据=="+sb);
                     JSONObject jsonObject1=new JSONObject(sb.toString());
                     String str2= (String) jsonObject1.get("flag");
                     System.out.println("验证是否输入正确===" + str2 + " " + str2.equals("1"));
@@ -252,7 +286,7 @@ public class RegisterActivity extends AppCompatActivity {
                         statu[0] =0;
                     isEnded[0] =true;
                 }  catch (Exception e) {
-                    System.out.println("===点击继续游戏抛出错误===");
+                    System.out.println("===点击注册下一步抛出错误===");
                     e.printStackTrace();
                 }finally {
                     if(connection!=null){
@@ -276,7 +310,7 @@ public class RegisterActivity extends AppCompatActivity {
         return statu[0];
     }
 
-    private void setSystemBarTransparent() {
+/*    private void setSystemBarTransparent() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // LOLLIPOP解决方案
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
@@ -286,6 +320,6 @@ public class RegisterActivity extends AppCompatActivity {
             // KITKAT解决方案
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-    }
+    }*/
 }
 

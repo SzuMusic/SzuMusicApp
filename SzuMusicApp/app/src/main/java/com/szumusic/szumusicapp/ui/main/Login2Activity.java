@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.szumusic.szumusicapp.R;
+import com.szumusic.szumusicapp.utils.ActivityManagerApplication;
 import com.szumusic.szumusicapp.utils.NoDoubleClickListener;
 
 import org.json.JSONObject;
@@ -47,6 +48,7 @@ public class Login2Activity extends AppCompatActivity {
     private SharedPreferences sp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ActivityManagerApplication.addDestoryActivity(this,"login");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
         setSystemBarTransparent();
@@ -132,7 +134,7 @@ public class Login2Activity extends AppCompatActivity {
         new Thread(new Runnable(){
             @Override
             public void run() {
-                String url="http://120.27.106.28/MusicGrade/pLoginIn";
+                String url="http://172.31.69.182:8080/MusicGrade/pLoginIn";
                 HttpURLConnection connection=null;
                 try {
                     URL httpUrl=new URL(url);
@@ -218,7 +220,6 @@ public class Login2Activity extends AppCompatActivity {
     private void reg() {
         Intent intent2=new Intent(Login2Activity.this,RegisterActivity.class);
         startActivity(intent2);
-        finish();
         //Login2Activity.this.finish();
     }
 

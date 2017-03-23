@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -46,15 +47,23 @@ import com.szumusic.szumusicapp.ui.base.PlayerFragment;
 import com.szumusic.szumusicapp.ui.common.MyFragmentPagerAdapter;
 import com.szumusic.szumusicapp.ui.common.SettingListAdapter;
 import com.szumusic.szumusicapp.ui.music.player.PlayService;
+import com.szumusic.szumusicapp.utils.ActivityManagerApplication;
 import com.szumusic.szumusicapp.utils.Bind;
 import com.szumusic.szumusicapp.utils.ImageUtils;
 import com.szumusic.szumusicapp.utils.ScreenUtils;
 import com.szumusic.szumusicapp.utils.ViewBinder;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -67,6 +76,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private PlayService playService;
     PlayberUpdateReceiver playberUpdateReceiver;
     AlertDialog dialog=null;//场景定位的dialog
+    AlertDialog userinfo_dialog=null;
     @Bind(R.id.tv_play_bar_title)
     TextView tv_play_bar_title;
     @Bind(R.id.tv_play_bar_artist)
@@ -85,16 +95,25 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     TextView user_name;
     @Bind(R.id.iv_play_bar_cover)
     ImageView iv_play_bar_cover;
+    @Bind(R.id.user_photo)
+    ImageView user_photo;
     MaterialSpinner spinner_time;
     MaterialSpinner spinner_position;
     MaterialSpinner spinner_weather;
     MaterialSpinner spinner_state;
     MaterialSpinner spinner_mood;
+
+    MaterialSpinner spinner_age;
+    MaterialSpinner spinner_sex;
     TextView tv_position;//用户定位
     TextView change_msg;
-    private String user_id;
+    TextView update_userinfo;
+    TextView cancel_update;
+    EditText e_name_tv;
+    public static String user_id;
     private String e_name;
     private SharedPreferences sp;
+    private Handler handler=new Handler();
     Bitmap coverBg;
     Handler handlerImg=new Handler(){
         @Override
@@ -112,6 +131,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ActivityManagerApplication.destoryActivity("login");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -143,13 +163,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
-        recyclerView.setLayoutManager(new GridLayoutManager(this,1));
-        SettingListAdapter settingListAdapter=new SettingListAdapter();
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+        SettingListAdapter settingListAdapter=new SettingListAdapter(this);//如果等下写事件的时候有错，改用全局的applicationcontext,一般别滥用全局的上下文，不然很容易bug
         recyclerView.setAdapter(settingListAdapter);
+
         player_layout=(LinearLayout) findViewById(R.id.player_layout);
         player_layout.setOnClickListener(this);
         iv_play_bar_play.setOnClickListener(this);
         fab.setOnClickListener(this);
+        user_photo.setOnClickListener(this);
         talk_icon.setOnClickListener(this);
         search_edit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -298,13 +320,87 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 System.out.println("time选择的是"+spinner_time.getSelectedIndex()+spinner_time.getText());
                 dialog.hide();
                 break;
+            case R.id.user_photo:
+                if(userinfo_dialog!=null){
+                    userinfo_dialog.show();
+                }else{
+                    LayoutInflater inflater = LayoutInflater.from(this);
+                    View dialog_view = inflater.inflate(R.layout.dialog_userinfo, null);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setView(dialog_view);
+                    spinner_age= (MaterialSpinner) dialog_view.findViewById(R.id.spinner_age);
+                    spinner_sex= (MaterialSpinner) dialog_view.findViewById(R.id.spinner_sex);
+                    e_name_tv= (EditText) dialog_view.findViewById(R.id.e_name);
+                    e_name_tv.setText(e_name);
+                    update_userinfo= (TextView) dialog_view.findViewById(R.id.update_userinfo);
+                    update_userinfo.setOnClickListener(this);
+                    cancel_update= (TextView) dialog_view.findViewById(R.id.cancel_update);
+                    cancel_update.setOnClickListener(this);
+                    spinner_age.setItems("00后","90后","80后","70后","60后","60前");
+                    spinner_sex.setItems("保密", "男", "女");
+                    userinfo_dialog=builder.create();
+                    userinfo_dialog.show();
+                }
+                break;
+            case R.id.update_userinfo:
+                String url="http://172.31.69.182:8080/MusicGrade/pUpdUserInfo";
+                OkHttpClient client = new OkHttpClient();
+                Map<String, Object> map = new HashMap<String, Object>();
+                e_name=e_name_tv.getText().toString();
+                map.put("user_id",user_id);
+                map.put("e_name",e_name_tv.getText().toString());
+                map.put("age",spinner_age.getSelectedIndex());
+                map.put("sex",spinner_sex.getSelectedIndex());
+                System.out.println(spinner_age.getSelectedIndex()+"==="+spinner_age.getText());
+                final JSONObject jsonObject = new JSONObject(map);
+                FormBody formBody = new FormBody.Builder()
+                        .add("data",jsonObject.toString())
+                        .build();
+                Request request = new Request.Builder().url(url).post(formBody).build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String result=response.body().string();
+                        System.out.println(result);
+                        try {
+                            JSONObject myjson=new JSONObject(result);
+                            Boolean isSucceed=myjson.getBoolean("flag");
+                            if(isSucceed) {
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(HomeActivity.this, "信息修改成功~", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    userinfo_dialog.hide();
+                                }
+                            });
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                break;
+            case R.id.cancel_update:
+                userinfo_dialog.hide();
+                break;
         }
     }
 
     @Override
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         playService=( (PlayService.PlayBinder) iBinder).getService();
-        System.out.println("执行了onServiceConnected函数:当前mediaplayer的状态为"+playService.getState()+playService.getMusicList().size());
+        System.out.println("执行了onServiceConnected函数:当前mediaplayer的状态为" + playService.getState() + playService.getMusicList().size());
         if(playService.getMusicList().size()!=0){
             Music music=playService.getMusic();
             tv_play_bar_title.setText(music.getTitle());

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#f4f4f4"
+    >
+
+    <TextView
+        android:id="@+id/tv_position"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        />
+    <EditText android:id="@+id/e_name"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="12dp"
+        android:padding="8dp"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:background="@drawable/login_editx2"
+        />
+    <com.jaredrummler.materialspinner.MaterialSpinner
+        android:id="@+id/spinner_age"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        />
+    <com.jaredrummler.materialspinner.MaterialSpinner
+        android:id="@+id/spinner_sex"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        >
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5">
+            <TextView
+                android:id="@+id/cancel_update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="取消"
+                android:textAlignment="center"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:background="@drawable/btn_home_submit"
+                android:textColor="@color/white"
+
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5">
+            <TextView
+                android:id="@+id/update_userinfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="修改"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:textAlignment="center"
+                android:background="@drawable/btn_home_submit"
+                android:textColor="@color/white"
+                />
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+
+</LinearLayout>
