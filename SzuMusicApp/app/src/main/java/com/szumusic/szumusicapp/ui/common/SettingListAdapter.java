@@ -1,6 +1,9 @@
 package com.szumusic.szumusicapp.ui.common;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +17,7 @@ import android.widget.Toast;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.szumusic.szumusicapp.R;
 import com.szumusic.szumusicapp.ui.main.HomeActivity;
+import com.szumusic.szumusicapp.ui.main.Login2Activity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,10 +39,12 @@ import okhttp3.Response;
 public class SettingListAdapter extends RecyclerView.Adapter {
     private Context context;
     private String[] titles = new String[]{"我的消息", "会员中心", "我的好友", "切换模式","定时关机","系统设置","关于我们","退出登录"};
+    AlertDialog quit_dialog;
+    String user_id;
 
-
-    public SettingListAdapter(Context context) {
+    public SettingListAdapter(Context context,String user_id) {
         this.context = context;
+        this.user_id=user_id;
     }
 
     @Override
@@ -110,7 +116,7 @@ public class SettingListAdapter extends RecyclerView.Adapter {
                         cancel_tv= (TextView) dialog_view.findViewById(R.id.cancel_quit);
                         quit_tv.setOnClickListener(this);
                         cancel_tv.setOnClickListener(this);
-                        AlertDialog quit_dialog=builder.create();
+                        quit_dialog=builder.create();
                         quit_dialog.show();
                     }
                     break;
@@ -118,15 +124,10 @@ public class SettingListAdapter extends RecyclerView.Adapter {
                     String url="http://172.31.69.182:8080/MusicGrade/pLogOut";
                     OkHttpClient client = new OkHttpClient();
                     Map<String, Object> map = new HashMap<String, Object>();
-                   /* e_name=e_name_tv.getText().toString();
-                    map.put("user_id",user_id);
-                    map.put("e_name",e_name_tv.getText().toString());
-                    map.put("age",spinner_age.getSelectedIndex());
-                    map.put("sex",spinner_sex.getSelectedIndex());
-                    System.out.println(spinner_age.getSelectedIndex()+"==="+spinner_age.getText());*/
+                    map.put("user_id", user_id);
                     final JSONObject jsonObject = new JSONObject(map);
                     FormBody formBody = new FormBody.Builder()
-                            .add("data",jsonObject.toString())
+                            .add("data", jsonObject.toString())
                             .build();
                     Request request = new Request.Builder().url(url).post(formBody).build();
                     client.newCall(request).enqueue(new Callback() {
@@ -137,33 +138,20 @@ public class SettingListAdapter extends RecyclerView.Adapter {
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-                            String result=response.body().string();
-                            System.out.println(result);
-                            try {
-                                JSONObject myjson=new JSONObject(result);
-                                Boolean isSucceed=myjson.getBoolean("flag");
-                                /*if(isSucceed) {
-                                    handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(HomeActivity.this, "信息修改成功~", Toast.LENGTH_LONG).show();
-                                        }
-                                    });
-                                }
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        userinfo_dialog.hide();
-                                    }
-                                });*/
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
                         }
                     });
+                    SharedPreferences sp=context.getSharedPreferences("userinfo", context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.clear();
+                    editor.commit();
+                    Intent intent2=new Intent(context,Login2Activity.class);
+                    context.startActivity(intent2);
+                    Activity activity=(Activity)context;
+                    activity.finish();
                     break;
                 case R.id.cancel_quit:
+                    quit_dialog.hide();
                     break;
             }
         }

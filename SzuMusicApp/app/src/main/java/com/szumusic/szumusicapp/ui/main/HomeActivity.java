@@ -15,7 +15,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -53,7 +52,6 @@ import com.szumusic.szumusicapp.utils.ImageUtils;
 import com.szumusic.szumusicapp.utils.ScreenUtils;
 import com.szumusic.szumusicapp.utils.ViewBinder;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -164,7 +162,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
-        SettingListAdapter settingListAdapter=new SettingListAdapter(this);//如果等下写事件的时候有错，改用全局的applicationcontext,一般别滥用全局的上下文，不然很容易bug
+        SettingListAdapter settingListAdapter=new SettingListAdapter(this,user_id);//如果等下写事件的时候有错，改用全局的applicationcontext,一般别滥用全局的上下文，不然很容易bug
         recyclerView.setAdapter(settingListAdapter);
 
         player_layout=(LinearLayout) findViewById(R.id.player_layout);
@@ -343,7 +341,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.update_userinfo:
-                String url="http://172.31.69.182:8080/MusicGrade/pUpdUserInfo";
+                String url="http://120.27.106.28/MusicGrade/pUpdUserInfo";
                 OkHttpClient client = new OkHttpClient();
                 Map<String, Object> map = new HashMap<String, Object>();
                 e_name=e_name_tv.getText().toString();
