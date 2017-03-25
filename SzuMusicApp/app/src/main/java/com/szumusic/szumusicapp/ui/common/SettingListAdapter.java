@@ -35,7 +35,7 @@ import okhttp3.Response;
 public class SettingListAdapter extends RecyclerView.Adapter {
     private Context context;
     private String[] titles = new String[]{"我的消息", "会员中心", "我的好友", "切换模式","定时关机","系统设置","关于我们","退出登录"};
-
+    AlertDialog quit_dialog;
 
     public SettingListAdapter(Context context) {
         this.context = context;
@@ -110,7 +110,7 @@ public class SettingListAdapter extends RecyclerView.Adapter {
                         cancel_tv= (TextView) dialog_view.findViewById(R.id.cancel_quit);
                         quit_tv.setOnClickListener(this);
                         cancel_tv.setOnClickListener(this);
-                        AlertDialog quit_dialog=builder.create();
+                        quit_dialog=builder.create();
                         quit_dialog.show();
                     }
                     break;
@@ -164,6 +164,7 @@ public class SettingListAdapter extends RecyclerView.Adapter {
                     });
                     break;
                 case R.id.cancel_quit:
+                    quit_dialog.hide();
                     break;
             }
         }
