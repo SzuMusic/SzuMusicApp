@@ -41,7 +41,6 @@ public class Register2Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register2);
-        setSystemBarTransparent();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -105,7 +104,7 @@ public class Register2Activity extends AppCompatActivity {
         new Thread(new Runnable(){
             @Override
             public void run() {
-                String url="http://172.31.69.182:8080/MusicGrade/regUser";
+                String url="http://120.27.106.28/MusicGrade/regUser";
                 HttpURLConnection connection=null;
                 try {
                     URL httpUrl=new URL(url);
@@ -168,7 +167,7 @@ public class Register2Activity extends AppCompatActivity {
         return statu[0];
     }
 
-    private void setSystemBarTransparent() {
+/*    private void setSystemBarTransparent() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // LOLLIPOP解决方案
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
@@ -178,5 +177,5 @@ public class Register2Activity extends AppCompatActivity {
             // KITKAT解决方案
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-    }
+    }*/
 }

@@ -144,7 +144,7 @@ public class RegisterActivity extends AppCompatActivity {
         new Thread(new Runnable(){
             @Override
             public void run() {
-                String url="http://172.31.69.182:8080/MusicGrade/getPhone";
+                String url="http://120.27.106.28/MusicGrade/getPhone";
                 HttpURLConnection connection=null;
                 try {
                     URL httpUrl=new URL(url);
@@ -246,7 +246,7 @@ public class RegisterActivity extends AppCompatActivity {
         new Thread(new Runnable(){
             @Override
             public void run() {
-                String url="http://172.31.69.182:8080/MusicGrade/sendConfirmNum";
+                String url="http://120.27.106.28/MusicGrade/sendConfirmNum";
                 HttpURLConnection connection=null;
                 try {
                     URL httpUrl=new URL(url);
