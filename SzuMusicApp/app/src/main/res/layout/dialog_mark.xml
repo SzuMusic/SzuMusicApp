@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="43dp"
     android:paddingLeft="22.5dp"
@@ -17,17 +19,18 @@
         android:textSize="16sp"
         android:background="@drawable/btn_home_mark"
         />
+
     <Button
         android:id="@+id/btn_like"
         android:layout_width="fill_parent"
         android:layout_height="42dip"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/btn_home_mark"
         android:gravity="center"
         android:text="好听"
         android:textColor="#ffffff"
-        android:background="@drawable/btn_home_mark"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp"
-        />
+        android:textSize="16sp" />
+
     <Button
         android:id="@+id/btn_normal"
         android:layout_width="fill_parent"
@@ -60,5 +63,11 @@
         android:background="@drawable/btn_home_mark_dislike"
         android:textSize="16sp"
         android:layout_marginTop="8dp"
+        />
+
+    <com.hsalf.smilerating.SmileRating
+        android:id="@+id/smile_rating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         />
 </LinearLayout>

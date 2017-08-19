@@ -53,6 +53,7 @@
             android:inputType="textEmailAddress"
             android:maxLines="1"
             android:singleLine="true"
+            android:textCursorDrawable="@drawable/cursor_style"
             android:background="@drawable/login_editx"/>
 
         <EditText android:id="@+id/password"
@@ -68,6 +69,7 @@
             android:maxLines="1"
             android:singleLine="true"
             android:background="@drawable/login_editx2"
+            android:textCursorDrawable="@drawable/cursor_style"
             />
 
         <Button android:id="@+id/login_in_button"
