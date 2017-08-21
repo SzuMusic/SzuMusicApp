@@ -8,40 +8,56 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:orientation="vertical"
+        >
 
-        <TextView
-            android:id="@+id/tv_current_time"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/play_time_start"
-            android:textColor="@color/white"
-            android:textSize="10sp" />
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_marginBottom="5dp"
+            >
+            <TextView
+                android:id="@+id/tv_current_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/play_time_start"
+                android:textColor="#898d99"
+
+                android:textSize="10sp" />
+            <TextView
+                android:id="@+id/tv_total_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/play_time_start"
+                android:textColor="#a5a7b0"
+                android:layout_alignParentRight="true"
+
+                android:textSize="10sp" />
+        </RelativeLayout>
+
 
         <SeekBar
             android:id="@+id/sb_progress"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:maxHeight="2dp"
             android:minHeight="2dp"
+            android:progress="20"
+            android:paddingLeft="0dp"
+            android:paddingStart="0dp"
+            android:paddingRight="0dp"
+            android:paddingEnd="0dp"
             android:progressDrawable="@drawable/seek_bar_progress_style"
             android:thumb="@drawable/ic_seek_bar_progress_btn" />
-
-        <TextView
-            android:id="@+id/tv_total_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/play_time_start"
-            android:textColor="@color/translucent_white"
-            android:textSize="10sp" />
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        >
 
         <ImageView
             android:id="@+id/iv_mode"
@@ -52,24 +68,26 @@
 
         <ImageView
             android:id="@+id/iv_prev"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80px"
+            android:layout_height="80px"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/iv_play"
+            android:layout_marginRight="20dp"
             android:src="@drawable/play_btn_prev_selector" />
 
         <ImageView
             android:id="@+id/iv_play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150px"
+            android:layout_height="150px"
             android:layout_centerInParent="true"
             android:src="@drawable/play_btn_play_pause_selector" />
 
         <ImageView
             android:id="@+id/iv_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80px"
+            android:layout_height="80px"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
             android:layout_toRightOf="@id/iv_play"
             android:src="@drawable/play_btn_next_selector" />
     </RelativeLayout>

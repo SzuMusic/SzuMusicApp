@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import online.osslab.CircleProgressBar;
+
 
 public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeListener, View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
@@ -55,8 +57,9 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
     SeekBar sb_progress;
     @Bind(R.id.iv_next)
     ImageView iv_next;
-    @Bind(R.id.iv_play_page_bg)
-    ImageView iv_play_page_bg;
+    /*@Bind(R.id.iv_play_page_bg)
+    ImageView iv_play_page_bg;*/
+    CircleProgressBar circleProgress;
     private AlbumCoverView mAlbumCoverView;
 
     String title;//歌名
@@ -84,6 +87,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
                         double progress=(current_duration/(double)total)*100;
                         //System.out.println("当前的进度为"+(int)progress);
                         sb_progress.setProgress((int)progress);
+                        circleProgress.setProgress((int)progress);
                     }
                 });
             }else{
@@ -94,6 +98,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
                         double progress=(current_duration/(double)total)*100;
                         //System.out.println("当前的进度为"+(int)progress);
                         sb_progress.setProgress((int)progress);
+                        circleProgress.setProgress((int)progress);
                     }
                 });
             }
@@ -133,6 +138,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
                     double progress=(current_duration/(double)total)*100;
                     //System.out.println("当前的进度为"+(int)progress);
                     sb_progress.setProgress((int)progress);
+                    circleProgress.setProgress((int)progress);
                 }
             });
         }else{
@@ -143,6 +149,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
                     double progress=(current_duration/(double)total)*100;
                     //System.out.println("当前的进度为"+(int)progress);
                     sb_progress.setProgress((int)progress);
+                    circleProgress.setProgress((int)progress);
                 }
             });
         }
@@ -202,6 +209,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
         View coverView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_player_album, null);
         View lrcView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_play_page_lrc, null);
         mAlbumCoverView= (AlbumCoverView) coverView.findViewById(R.id.album_cover);
+        circleProgress= (CircleProgressBar) coverView.findViewById(R.id.circleProgress);
         mAlbumCoverView.start();
         mViewPagerContent = new ArrayList<>(2);
         mViewPagerContent.add(coverView);
@@ -253,7 +261,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
             total_minute= (int) (total/60000);
             total_second= (int) (total%60000)/1000;
             iv_play.setSelected(isPlaying);
-            iv_play_page_bg.setImageBitmap(coverBg);
+
             if (isPlaying)
                 mAlbumCoverView.start();
             else
@@ -265,6 +273,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
             double progress=(current_duration/(double)total)*100;
             //System.out.println("当前的进度为"+(int)progress);
             sb_progress.setProgress((int)progress);
+            circleProgress.setProgress((int)progress);
 
         }
     }
@@ -307,6 +316,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
                                         tv_current_time.setText("0"+current_minute+":0"+current_second);
                                         double progress=(current_duration/(double)total)*100;
                                         sb_progress.setProgress((int)progress);
+                                        circleProgress.setProgress((int)progress);
                                     }
                                 });
                             }else{
@@ -316,6 +326,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
                                         tv_current_time.setText("0"+current_minute+":"+current_second);
                                         double progress=(current_duration/(double)total)*100;
                                         sb_progress.setProgress((int)progress);
+                                        circleProgress.setProgress((int)progress);
                                     }
                                 });
                             }

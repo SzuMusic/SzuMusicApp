@@ -63,11 +63,11 @@
             android:label=""
             android:theme="@style/AppTheme.NoActionBar">
 
-            <intent-filter android:label="@string/app_name">
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter android:label="@string/app_name">-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity
             android:name=".ui.main.LocalActivity"
@@ -83,12 +83,12 @@
             android:label="@string/title_activity_login2"
             android:theme="@style/AppTheme.NoActionBar">
 
-            <!-- <intent-filter android:label="@string/app_name" > -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
+             <intent-filter android:label="@string/app_name" >
+             <action android:name="android.intent.action.MAIN" />
 
 
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
         </activity>
         <activity
             android:name=".ui.main.RegisterActivity"

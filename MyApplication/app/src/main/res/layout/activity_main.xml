@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.szu.myapplication.MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <!--<online.osslab.CircleProgressBar-->
+        <!--android:id="@+id/myCircleProgressBar"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--circle:background_color="#FFCDD2"-->
+        <!--circle:background_width="5dp"-->
+        <!--circle:progress_color="#F44336"-->
+        <!--circle:progress_width="10dp"-->
+
+        <!--tools:layout_editor_absoluteY="0dp"-->
+        <!--tools:layout_editor_absoluteX="0dp" />-->
+    <jaygoo.widget.wlv.WaveLineView
+        android:id="@+id/waveLineView"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        app:wlvBackgroundColor="@android:color/white"
+        app:wlvMoveSpeed="290"
+        app:wlvLineColor="@color/black"
+        app:wlvFineLineWidth="5dp"
+        app:wlvThickLineWidth="2dp"
+        />
+
+
+</LinearLayout>

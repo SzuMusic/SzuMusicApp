@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:circle="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent">
 
    <!-- <com.szumusic.szumusicapp.ui.widget.CircleView
@@ -12,9 +13,33 @@
         app:strokeWidth="4dp"
         app:strokeColor="@color/colorWhite"
         />-->
-    <com.szumusic.szumusicapp.ui.widget.AlbumCoverView
-        android:id="@+id/album_cover"
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="match_parent">
+        <online.osslab.CircleProgressBar
+            android:id="@+id/circleProgress"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            circle:background_color="#eaebee"
+            circle:background_width="5dp"
+            circle:progress_color="@color/colorAccent"
+            circle:progress_width="5dp"
+            android:layout_gravity="center"
+            />
+        <com.szumusic.szumusicapp.ui.widget.CircleView
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center"
+        android:src="@drawable/demo_cover"
         />
+        <com.szumusic.szumusicapp.ui.widget.AlbumCoverView
+            android:id="@+id/album_cover"
+            android:layout_width="432dp"
+            android:layout_height="432dp"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            />
+    </FrameLayout>
+
 </LinearLayout>

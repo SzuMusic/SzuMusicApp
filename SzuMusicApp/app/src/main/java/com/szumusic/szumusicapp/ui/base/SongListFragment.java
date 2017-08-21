@@ -111,7 +111,7 @@ public class SongListFragment extends Fragment {
                     mood=intent.getIntExtra("mood",0);
                     state=intent.getIntExtra("state",0);
                     System.out.println(time);
-                    String url="http://120.27.106.28/MusicGrade/pRecMusic";
+                    String url="http://172.31.69.84:8080/MusicGrade/pRecMusic";
                     Map<String, Object> map = new HashMap<String, Object>();
                     map.put("time",time);
                     map.put("weather",weather);
@@ -150,7 +150,7 @@ public class SongListFragment extends Fragment {
                                     music.setArtist(str[0]);
                                     music.setAlbum(musicobj.getString("album"));
                                     music.setCoverUri(musicobj.getString("imageUrl"));
-                                    music.setUri("http://120.27.106.28/musicSource/music/"+musicobj.getString("singerId")+"/"+musicobj.getString("musicId")+".mp3");
+                                    music.setUri("http://172.31.69.84:8080/musicSource/music/"+musicobj.getString("singerId")+"/"+musicobj.getString("musicId")+".mp3");
                                     music.setId(musicobj.getLong("musicId"));
                                     music.setProbability(musicobj.getDouble("probability"));
                                     musicList.add(music);
@@ -169,7 +169,7 @@ public class SongListFragment extends Fragment {
                     });
                     break;
                 case 2:
-                    String url2="http://120.27.106.28/MusicGrade/pGiveGrade";
+                    String url2="http://172.31.69.84:8080/MusicGrade/pGiveGrade";
                     Map<String, Object> map2 = new HashMap<String, Object>();
                     map2.put("time",time);
                     map2.put("weather",weather);
