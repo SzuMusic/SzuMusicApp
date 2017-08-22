@@ -16,6 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.mapapi.common.SysOSUtil;
+import com.hsalf.smilerating.BaseRating;
+import com.hsalf.smilerating.SmileRating;
 import com.szumusic.szumusicapp.R;
 import com.szumusic.szumusicapp.data.model.Music;
 
@@ -79,6 +82,8 @@ public class SongListAdapter extends RecyclerView.Adapter {
                     context.sendBroadcast(intent5);
                     markDialog.hide();
                     break;
+                case R.id.smile_rating:
+                    break;
             }
         }
     };
@@ -99,6 +104,7 @@ public class SongListAdapter extends RecyclerView.Adapter {
         LinearLayout content_layout;
         TextView tv_title;
         TextView tv_artist;
+        SmileRating smileRating;
         public Viewholder(View itemView) {
             super(itemView);
             order_number=(TextView)itemView.findViewById(R.id.order_number);
@@ -129,16 +135,65 @@ public class SongListAdapter extends RecyclerView.Adapter {
                         LinearLayout root = (LinearLayout) LayoutInflater.from(context).inflate(
                                 R.layout.dialog_mark, null);
                         markDialog.setContentView(root);
-                        Button btn_love= (Button) root.findViewById(R.id.btn_love);
-                        Button btn_like= (Button) root.findViewById(R.id.btn_like);
-                        Button btn_normal= (Button) root.findViewById(R.id.btn_normal);
-                        Button btn_dislike= (Button) root.findViewById(R.id.btn_dislike);
-                        Button btn_hate= (Button) root.findViewById(R.id.btn_hate);
-                        btn_love.setOnClickListener(markListener);
-                        btn_like.setOnClickListener(markListener);
-                        btn_normal.setOnClickListener(markListener);
-                        btn_dislike.setOnClickListener(markListener);
-                        btn_hate.setOnClickListener(markListener);
+                        smileRating = (SmileRating) root.findViewById(R.id.smile_rating);
+                        smileRating.setOnSmileySelectionListener(new SmileRating.OnSmileySelectionListener() {
+                            @Override
+                            public void onSmileySelected(int smiley, boolean reselected) {
+                                System.out.println("用户选择了");
+                                switch (smiley) {
+                                    case SmileRating.BAD:
+                                        Intent intent4=new Intent("UPDATE_COMMEND");
+                                        intent4.putExtra("type",2);
+                                        intent4.putExtra("score",2);
+                                        intent4.putExtra("probability",musicList.get(position).getProbability());
+                                        intent4.putExtra("musicId",musicList.get(position).getId());
+                                        context.sendBroadcast(intent4);
+                                        markDialog.hide();
+                                        smileRating.setSelectedSmile(BaseRating.NONE);
+                                        break;
+                                    case SmileRating.GOOD:
+                                        Intent intent2=new Intent("UPDATE_COMMEND");
+                                        intent2.putExtra("type",2);
+                                        intent2.putExtra("score",4);
+                                        intent2.putExtra("probability",musicList.get(position).getProbability());
+                                        intent2.putExtra("musicId",musicList.get(position).getId());
+                                        context.sendBroadcast(intent2);
+                                        markDialog.hide();
+                                        smileRating.setSelectedSmile(BaseRating.NONE);
+                                        break;
+                                    case SmileRating.GREAT:
+                                        Intent intent1=new Intent("UPDATE_COMMEND");
+                                        intent1.putExtra("type",2);
+                                        intent1.putExtra("score",5);
+                                        intent1.putExtra("probability",musicList.get(position).getProbability());
+                                        intent1.putExtra("musicId",musicList.get(position).getId());
+                                        context.sendBroadcast(intent1);
+                                        markDialog.hide();
+                                        smileRating.setSelectedSmile(BaseRating.NONE);
+                                        break;
+                                    case SmileRating.OKAY:
+                                        Intent intent3=new Intent("UPDATE_COMMEND");
+                                        intent3.putExtra("type",2);
+                                        intent3.putExtra("score",3);
+                                        intent3.putExtra("probability",musicList.get(position).getProbability());
+                                        intent3.putExtra("musicId",musicList.get(position).getId());
+                                        context.sendBroadcast(intent3);
+                                        markDialog.hide();
+                                        smileRating.setSelectedSmile(BaseRating.NONE);
+                                        break;
+                                    case SmileRating.TERRIBLE:
+                                        Intent intent5=new Intent("UPDATE_COMMEND");
+                                        intent5.putExtra("type",2);
+                                        intent5.putExtra("score",1);
+                                        intent5.putExtra("probability",musicList.get(position).getProbability());
+                                        intent5.putExtra("musicId",musicList.get(position).getId());
+                                        context.sendBroadcast(intent5);
+                                        markDialog.hide();
+                                        smileRating.setSelectedSmile(BaseRating.NONE);
+                                        break;
+                                }
+                            }
+                        });
                         Window dialogWindow = markDialog.getWindow();
                         dialogWindow.setGravity(Gravity.BOTTOM);
                         dialogWindow.setWindowAnimations(R.style.dialogstyle); // 添加动画

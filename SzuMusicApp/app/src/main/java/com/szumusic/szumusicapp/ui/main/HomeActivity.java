@@ -428,7 +428,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            int type=intent.getIntExtra("type",1);//1表示添加新的歌曲到播放列表。3、2表示播放暂停事件,4表示更新进度,5表示监听到播放完成后自动播放下一首,6表示增加歌曲到播放列表，7表示向service请求下一首
+            int type=intent.getIntExtra("type",1);//1表示添加新的歌曲到播放列表。3、2表示播放暂停事件,4表示更新进度,5表示监听到播放完成后自动播放下一首,6表示增加歌曲到播放列表，7表示向service请求下一首, 8表示更新场景信息
             System.out.println("HomeActivity接受到了广播type："+type);
             switch (type){
                 case 1:
@@ -490,6 +490,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 case 7:
                     System.out.println("HomeActivity调用了playService的next函数");
                     playService.next();
+                    break;
+                case 8:
+                    System.out.println("进入了场景初始化");
+                    spinner_time.setSelectedIndex((intent.getIntExtra("time",0)));
+                    spinner_state.setSelectedIndex(intent.getIntExtra("state",0));
+                    spinner_weather.setSelectedIndex(intent.getIntExtra("weather",0));
+                    spinner_mood.setSelectedIndex(intent.getIntExtra("feel",0));
                     break;
             }
         }

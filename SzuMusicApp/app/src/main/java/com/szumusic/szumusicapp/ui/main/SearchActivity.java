@@ -141,8 +141,9 @@ public class SearchActivity extends AppCompatActivity {
                                 music.setTitle(str[1]);
                                 music.setArtist(str[0]);
                                 music.setAlbum(musicobj.getString("album"));
-                                music.setUri("http://172.31.69.84:8080/musicSource/music/"+musicobj.getString("singerId")+"/"+musicobj.getString("musicId")+".mp3");
+                                music.setUri("https://120.27.106.28/musicSource/music/"+musicobj.getString("singerId")+"/"+musicobj.getString("musicId")+".mp3");
                                 music.setId(musicobj.getLong("musicId"));
+                                System.out.println("获得的歌曲的url为："+"https://120.27.106.28/musicSource/music/"+musicobj.getString("singerId")+"/"+musicobj.getString("musicId")+".mp3");
                                 music.setProbability(musicobj.getDouble("probability"));
                                 musicList.add(music);
                             }

@@ -30,4 +30,5 @@ dependencies {
     compile 'com.github.CardinalNow:Android-CircleProgressIndicator:v0.2'
     compile 'online.osslab:CircleProgress:1.0.0'
     compile 'com.github.Jay-Goo:WaveLineView:v1.0.2'
+    compile 'com.github.sujithkanna:smileyrating:1.6.8'
 }

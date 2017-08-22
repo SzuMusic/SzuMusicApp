@@ -1,10 +1,13 @@
 package com.szumusic.szumusicapp.ui.base;
 
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -19,6 +22,8 @@ import android.widget.Toast;
 import com.szumusic.szumusicapp.R;
 import com.szumusic.szumusicapp.data.model.Music;
 import com.szumusic.szumusicapp.ui.common.SongListAdapter;
+import com.szumusic.szumusicapp.ui.main.HomeActivity;
+import com.szumusic.szumusicapp.ui.music.player.PlayService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,6 +71,81 @@ public class SongListFragment extends Fragment {
         IntentFilter intentFilter=new IntentFilter("UPDATE_COMMEND");
         updateSongListReceiver=new UpdateSongListReceiver();
         getContext().registerReceiver(updateSongListReceiver,intentFilter);
+        //异步执行后台初始化
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                System.out.println("执行了SongListFragmentdoInBackground函数");
+                String url="http://172.31.69.84:8080/MusicGrade/pRecMusic";
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("isFirst","y");
+                map.put("userid",userid);
+                final JSONObject jsonObject = new JSONObject(map);
+                System.out.println(jsonObject.toString());
+                OkHttpClient client = new OkHttpClient();
+                FormBody formBody = new FormBody.Builder()
+                        .add("data", jsonObject.toString())
+                        .build();
+                Request request = new Request.Builder().url(url).post(formBody).build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        System.out.println("请求");
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String result = new String(response.body().string());
+                        System.out.println(result);
+                        try {
+                            JSONObject myjson = new JSONObject(result);
+                            JSONArray musics=myjson.getJSONArray("musics");
+                            JSONObject musicobj;
+                            String[] str;
+                            musicList.clear();
+                            for (int i=0;i<musics.length();i++){
+                                musicobj=musics.getJSONObject(i);
+                                str=musicobj.getString("name").split("-");
+                                Music music=new Music();
+                                music.setTitle(str[1]);
+                                music.setArtist(str[0]);
+                                music.setAlbum(musicobj.getString("album"));
+                                music.setCoverUri(musicobj.getString("imageUrl"));
+                                music.setUri("https://www.szumusic.top/musicSource/music/"+musicobj.getString("singerId")+"/"+musicobj.getString("musicId")+".mp3");
+                                music.setId(musicobj.getLong("musicId"));
+                                System.out.println("获取到的歌曲的url："+"https://www.szumusic.top/musicSource/music/"+musicobj.getString("singerId")+"/"+musicobj.getString("musicId")+".mp3");
+                                music.setProbability(musicobj.getDouble("probability"));
+                                musicList.add(music);
+                            }
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    songListAdapter.notifyItemRangeChanged(0,musicList.size());
+                                }
+                            });
+                            JSONObject sceneObj=myjson.getJSONObject("scene");
+                            Intent intentScnee=new Intent("UPDATE_PLAYER");
+                            intentScnee.putExtra("type",8);
+                            intentScnee.putExtra("time",sceneObj.getInt("time"));
+                            intentScnee.putExtra("feel",sceneObj.getInt("feel"));
+                            intentScnee.putExtra("state",sceneObj.getInt("state"));
+                            intentScnee.putExtra("weather",sceneObj.getInt("weather"));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                return null;
+            }
+
+            @TargetApi(Build.VERSION_CODES.M)
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+
+            }
+        }.execute();
     }
 
     @Override
@@ -150,8 +230,9 @@ public class SongListFragment extends Fragment {
                                     music.setArtist(str[0]);
                                     music.setAlbum(musicobj.getString("album"));
                                     music.setCoverUri(musicobj.getString("imageUrl"));
-                                    music.setUri("http://172.31.69.84:8080/musicSource/music/"+musicobj.getString("singerId")+"/"+musicobj.getString("musicId")+".mp3");
+                                    music.setUri("https://www.szumusic.top/musicSource/music/"+musicobj.getString("singerId")+"/"+musicobj.getString("musicId")+".mp3");
                                     music.setId(musicobj.getLong("musicId"));
+                                    System.out.println("获取到的歌曲的url："+"https://www.szumusic.top/musicSource/music/"+musicobj.getString("singerId")+"/"+musicobj.getString("musicId")+".mp3");
                                     music.setProbability(musicobj.getDouble("probability"));
                                     musicList.add(music);
                                 }
