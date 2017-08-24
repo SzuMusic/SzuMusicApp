@@ -56,6 +56,7 @@
                             android:drawableLeft="@drawable/search_icon"
                             android:drawablePadding="10dp"
                             android:layout_marginRight="60dp"
+                            android:maxLines="1"
                             android:textColor="#333"
                             />
 

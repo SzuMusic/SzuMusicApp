@@ -17,29 +17,30 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <online.osslab.CircleProgressBar
             android:id="@+id/circleProgress"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            circle:background_color="#eaebee"
+            android:layout_width="210dp"
+            android:layout_height="210dp"
+            android:layout_gravity="center"
+            circle:background_color="#eceef3"
             circle:background_width="5dp"
             circle:progress_color="@color/colorAccent"
-            circle:progress_width="5dp"
-            android:layout_gravity="center"
-            />
+            circle:progress_width="5dp" />
+
         <com.szumusic.szumusicapp.ui.widget.CircleView
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_gravity="center"
-        android:src="@drawable/demo_cover"
-        />
+            android:id="@+id/song_album"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:src="@drawable/demo_cover" />
+
         <com.szumusic.szumusicapp.ui.widget.AlbumCoverView
             android:id="@+id/album_cover"
             android:layout_width="432dp"
             android:layout_height="432dp"
-            android:visibility="gone"
             android:layout_gravity="center"
-            />
+            android:visibility="gone" />
     </FrameLayout>
 
 </LinearLayout>

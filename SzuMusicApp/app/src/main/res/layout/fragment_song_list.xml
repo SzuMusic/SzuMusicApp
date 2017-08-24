@@ -10,83 +10,90 @@
         android:layout_gravity="center"
         android:text="请先选择场景信息"
         />
-    <LinearLayout
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:background="@drawable/recommendation_bg"
-            >
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#B3000000"
-                android:orientation="vertical"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="50dp"
-                    android:text="每日歌曲推荐"
-                    android:textSize="22sp"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="15dp"
-                    android:text="根据用户情境和状态进行个性化推荐"
-                    android:textColor="@color/white"
+                android:layout_height="150dp"
+                android:background="@drawable/recommendation_bg">
 
-                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#B3000000"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="50dp"
+                        android:text="每日歌曲推荐"
+                        android:textColor="@color/white"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="15dp"
+                        android:text="根据用户情境和状态进行个性化推荐"
+                        android:textColor="@color/white"
+
+                        />
+                </LinearLayout>
             </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="10dp">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="30dp"
+                    android:background="@color/colorPrimary">
+
+                </View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:text="推荐歌单"
+                    android:textAlignment="center"
+                    android:textColor="#000" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center_vertical"
+                    android:text="更多>>"
+                    android:textColor="#4e4e4e"
+                    android:textSize="12dp" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            </android.support.v7.widget.RecyclerView>
         </LinearLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:paddingLeft="5dp"
-            android:paddingTop="10dp"
-            >
-            <View
-                android:layout_width="3dp"
-                android:layout_height="30dp"
-                android:background="@color/colorPrimary"
-                >
+    </ScrollView>
 
-            </View>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="推荐歌单"
-                android:textAlignment="center"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:textColor="#000"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-
-                android:gravity="center_vertical"
-                android:text="更多>>"
-                android:textSize="12dp"
-                android:textColor="#4e4e4e"
-                android:layout_marginRight="10dp"
-                android:layout_alignParentRight="true"
-                />
-        </RelativeLayout>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            >
-
-        </android.support.v7.widget.RecyclerView>
-    </LinearLayout>
 </FrameLayout>

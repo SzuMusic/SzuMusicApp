@@ -53,6 +53,8 @@
         android:id="@+id/mytv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
+    <com.example.szu.myapplication.WaveView
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
 
 </LinearLayout>

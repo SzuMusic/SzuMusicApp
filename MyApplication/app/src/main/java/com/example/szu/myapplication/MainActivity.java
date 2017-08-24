@@ -1,6 +1,7 @@
 package com.example.szu.myapplication;
 
 import android.app.Dialog;
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,9 +15,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hsalf.smilerating.SmileRating;
+import com.linsh.waveview.Wave;
+import com.linsh.waveview.WaveView;
 
 import jaygoo.widget.wlv.WaveLineView;
 import online.osslab.CircleProgressBar;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,5 +64,6 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("用户选择了");
             }
         });
+
     }
 }

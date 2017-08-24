@@ -113,6 +113,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private SharedPreferences sp;
     private Handler handler=new Handler();
     Bitmap coverBg;
+    Bitmap albumBg;
+    int timeIndex;//场景时间
+    int weatherIndex;//场景天气
+    int stateIndex;//场景状态
+    int feelIndex;//场景感受
+    int addressIndex;//场景地址
+
     Handler handlerImg=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -255,8 +262,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 System.out.println("从service获得的进度为"+playService.getCurrentDuration());
                 playerFragment.setCurrent_duration( playService.getCurrentDuration());
                 playerFragment.setIsplaying(playService.getState());
-                if (coverBg!=null)
-                    playerFragment.setBlackground(coverBg);
+                if (albumBg!=null){
+                    playerFragment.setBlackground(albumBg);
+                    playerFragment.setCoverBackground(coverBg);
+                }
+
                 ft.commit();
                 isPlayFragmentShow=true;
                 break;
@@ -293,10 +303,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     change_msg.setOnClickListener(this);
                     spinner_time.setItems("清晨","上午","午间","下午","夜晚","深夜");
                     spinner_position.setItems("居室","办公室","商店","酒吧","街道","户外","图书馆","室内运功场");
-                    spinner_weather.setItems("晴天","阴天","雨天");
+                    spinner_weather.setItems("晴天","阴天","雨天","下雪","其他");
                     spinner_state.setItems("正常","在工作","在学习","在休息","在路途","在劳务");
                     spinner_mood.setItems("悲伤","失落","正常","愉悦","兴奋");
                     tv_position.setText("       "+playService.getLocationDescri());
+                    System.out.println("timeIndex为: "+(timeIndex-1));
+                    spinner_time.setSelectedIndex(timeIndex-1);
+                    if(weatherIndex!=0)
+                      spinner_weather.setSelectedIndex(weatherIndex-1);
+                    spinner_state.setSelectedIndex(stateIndex-1);
+                    spinner_mood.setSelectedIndex(feelIndex-1);
+                    spinner_position.setSelectedIndex(addressIndex-1);
                     dialog=builder.create();
                     dialog.show();
                 }
@@ -435,10 +452,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     Music music= (Music) intent.getSerializableExtra("music");
                     playService.playMusic(music);
                     tv_play_bar_title.setText(music.getTitle());
-                    tv_play_bar_artist.setText(music.getArtist()+"-"+music.getAlbum());
+                    tv_play_bar_artist.setText(music.getArtist());
                     iv_play_bar_play.setSelected(true);
                     tv_play_bar_title.setText(music.getTitle());
-                    tv_play_bar_artist.setText(music.getArtist()+"-"+music.getAlbum());
+                    tv_play_bar_artist.setText(music.getArtist());
                     iv_play_bar_play.setSelected(true);
                     if(music.getCoverUri()!=null){
                         System.out.println("专辑封面url为："+music.getCoverUri());
@@ -459,7 +476,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                                 msg.what=0;
                                 msg.obj=bmp;
                                 handlerImg.sendMessage(msg);
-
+                                coverBg= ImageUtils.blur(bmp,ImageUtils.BLUR_RADIUS);
+                                albumBg=bmp;
                             }
                         });
                     }
@@ -493,10 +511,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case 8:
                     System.out.println("进入了场景初始化");
-                    spinner_time.setSelectedIndex((intent.getIntExtra("time",0)));
-                    spinner_state.setSelectedIndex(intent.getIntExtra("state",0));
-                    spinner_weather.setSelectedIndex(intent.getIntExtra("weather",0));
-                    spinner_mood.setSelectedIndex(intent.getIntExtra("feel",0));
+                    timeIndex=intent.getIntExtra("time",0);
+                    stateIndex=intent.getIntExtra("state",0);
+                    weatherIndex=intent.getIntExtra("weather",0);
+                    feelIndex=intent.getIntExtra("feel",0);
+                    addressIndex=intent.getIntExtra("address",0);
                     break;
             }
         }

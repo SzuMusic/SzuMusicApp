@@ -323,6 +323,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     @Override
     public void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(playServiceReceiver);
         System.out.println("执行了PlayService的onDestroy方法");
     }
     class PlayServiceReceiver extends BroadcastReceiver {

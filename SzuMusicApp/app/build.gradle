@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.szumusic.szumusicapp"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -39,4 +39,5 @@ dependencies {
     compile 'online.osslab:CircleProgress:1.0.0'
     compile 'com.github.sujithkanna:smileyrating:1.6.8'
     compile 'com.hedgehog.ratingbar:app:1.1.2'
+    compile 'com.github.Jay-Goo:WaveLineView:v1.0.2'
 }

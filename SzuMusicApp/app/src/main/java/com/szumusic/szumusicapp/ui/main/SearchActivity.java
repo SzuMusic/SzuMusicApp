@@ -148,6 +148,7 @@ public class SearchActivity extends AppCompatActivity {
                                 musicList.add(music);
                             }
                             searchSongFragment.setMusicList(musicList);
+                            searchSongFragment.notifyChange();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

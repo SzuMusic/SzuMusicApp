@@ -109,16 +109,17 @@
                     android:layout_height="30dp"
                     android:background="@color/colorPrimary"
                     >
-
                 </View>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:text="推荐歌单"
+                    android:text="新歌速递"
                     android:textAlignment="center"
                     android:gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:textColor="#000"
+                    android:textSize="16sp"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -136,11 +137,47 @@
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.0"
                 android:layout_marginTop="4dp"
                 >
 
             </android.support.v7.widget.RecyclerView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="10dp"
+                android:layout_marginTop="4dp"
+                >
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="30dp"
+                    android:background="@color/colorPrimary"
+
+                    >
+
+                </View>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text="热门歌曲"
+                    android:textAlignment="center"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#000"
+                    android:textSize="16sp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+
+                    android:gravity="center_vertical"
+                    android:text="更多>>"
+                    android:textSize="12dp"
+                    android:textColor="#4e4e4e"
+                    android:layout_marginRight="10dp"
+                    android:layout_alignParentRight="true"
+                    />
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 

@@ -60,6 +60,7 @@ public class SongListFragment extends Fragment {
     int mood;
     int state;
     String userid;
+    String sceneid;//初次场景预测的id
 
     public SongListFragment() {
 
@@ -124,12 +125,16 @@ public class SongListFragment extends Fragment {
                                 }
                             });
                             JSONObject sceneObj=myjson.getJSONObject("scene");
+                            System.out.println("解析到的scene数据为："+sceneObj.toString());
                             Intent intentScnee=new Intent("UPDATE_PLAYER");
                             intentScnee.putExtra("type",8);
                             intentScnee.putExtra("time",sceneObj.getInt("time"));
                             intentScnee.putExtra("feel",sceneObj.getInt("feel"));
                             intentScnee.putExtra("state",sceneObj.getInt("state"));
                             intentScnee.putExtra("weather",sceneObj.getInt("weather"));
+                            intentScnee.putExtra("address",sceneObj.getInt("address"));
+                            getContext().sendBroadcast(intentScnee);
+                            sceneid=sceneObj.getString("scene_id");
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -199,6 +204,7 @@ public class SongListFragment extends Fragment {
                     map.put("mood",mood);
                     map.put("state",state);
                     map.put("userid",userid);
+                    map.put("sceneid",sceneid);
                     final JSONObject jsonObject = new JSONObject(map);
                     System.out.println(jsonObject.toString());
                     OkHttpClient client = new OkHttpClient();

@@ -31,4 +31,5 @@ dependencies {
     compile 'online.osslab:CircleProgress:1.0.0'
     compile 'com.github.Jay-Goo:WaveLineView:v1.0.2'
     compile 'com.github.sujithkanna:smileyrating:1.6.8'
+    compile 'com.github.SenhLinsh:WaveView:1.0.0'
 }
