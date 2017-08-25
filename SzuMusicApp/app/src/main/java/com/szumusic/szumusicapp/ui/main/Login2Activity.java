@@ -134,7 +134,7 @@ public class Login2Activity extends AppCompatActivity {
         new Thread(new Runnable(){
             @Override
             public void run() {
-                String url="http://172.31.69.84:8080/MusicGrade/pLoginIn";
+                String url="http://172.29.108.242:8080/MusicGrade/pLoginIn";
                 HttpURLConnection connection=null;
                 try {
                     URL httpUrl=new URL(url);

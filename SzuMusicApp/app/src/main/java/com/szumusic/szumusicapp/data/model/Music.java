@@ -11,7 +11,7 @@ public class Music implements Serializable {
     // 歌曲类型 本地/网络
     private Type type;
     // [本地歌曲]歌曲id
-    private long id;
+    private long id=0;
     // 音乐标题
     private String title;
     // 艺术家
@@ -33,6 +33,8 @@ public class Music implements Serializable {
     // 发行日期
     private String year;
 
+    private double probability=0.5;
+
     public double getProbability() {
         return probability;
     }
@@ -40,8 +42,6 @@ public class Music implements Serializable {
     public void setProbability(double probability) {
         this.probability = probability;
     }
-
-    private double probability;
 
     public Type getType() {
         return type;

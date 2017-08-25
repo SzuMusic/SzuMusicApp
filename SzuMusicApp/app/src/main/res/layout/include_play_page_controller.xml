@@ -80,8 +80,8 @@
 
         <ImageView
             android:id="@+id/iv_play"
-            android:layout_width="150px"
-            android:layout_height="150px"
+            android:layout_width="140px"
+            android:layout_height="140px"
             android:layout_centerInParent="true"
             android:src="@drawable/play_btn_play_pause_selector" />
 
@@ -93,5 +93,14 @@
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@id/iv_play"
             android:src="@drawable/play_btn_next_selector" />
+        <ImageView
+            android:id="@+id/btn_like"
+            android:layout_width="60px"
+            android:layout_height="60px"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            android:src="@drawable/play_btn_like_selector"
+            />
     </RelativeLayout>
 </LinearLayout>

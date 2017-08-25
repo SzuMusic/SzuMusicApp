@@ -109,7 +109,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... params) {
                 System.out.println("执行了SearchActivity的asyncTask函数");
-                String url="http://172.31.69.84:8080/MusicGrade/pSearchMusics";
+                String url="http://172.29.108.242:8080/MusicGrade/pSearchMusics";
                 OkHttpClient client = new OkHttpClient();
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("findKey",key);
@@ -140,10 +140,11 @@ public class SearchActivity extends AppCompatActivity {
                                 Music music=new Music();
                                 music.setTitle(str[1]);
                                 music.setArtist(str[0]);
+                                music.setCoverUri(musicobj.getString("imageUrl"));
                                 music.setAlbum(musicobj.getString("album"));
-                                music.setUri("https://120.27.106.28/musicSource/music/"+musicobj.getString("singerId")+"/"+musicobj.getString("musicId")+".mp3");
+                                music.setUri("https://www.szumusic.top/musicSource/music/"+musicobj.getString("singerId")+"/"+musicobj.getString("musicId")+".mp3");
                                 music.setId(musicobj.getLong("musicId"));
-                                System.out.println("获得的歌曲的url为："+"https://120.27.106.28/musicSource/music/"+musicobj.getString("singerId")+"/"+musicobj.getString("musicId")+".mp3");
+                                System.out.println("获得的歌曲的url为："+"https://www.szumusic.top/musicSource/music/"+musicobj.getString("singerId")+"/"+musicobj.getString("musicId")+".mp3");
                                 music.setProbability(musicobj.getDouble("probability"));
                                 musicList.add(music);
                             }

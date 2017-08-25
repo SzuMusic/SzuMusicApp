@@ -77,7 +77,7 @@ public class SongListFragment extends Fragment {
             @Override
             protected Void doInBackground(Void... params) {
                 System.out.println("执行了SongListFragmentdoInBackground函数");
-                String url="http://172.31.69.84:8080/MusicGrade/pRecMusic";
+                String url="http://172.29.108.242:8080/MusicGrade/pRecMusic";
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("isFirst","y");
                 map.put("userid",userid);
@@ -91,7 +91,7 @@ public class SongListFragment extends Fragment {
                 client.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        System.out.println("请求");
+                        System.out.println("请求初始化失败");
                     }
 
                     @Override
@@ -196,7 +196,7 @@ public class SongListFragment extends Fragment {
                     mood=intent.getIntExtra("mood",0);
                     state=intent.getIntExtra("state",0);
                     System.out.println(time);
-                    String url="http://172.31.69.84:8080/MusicGrade/pRecMusic";
+                    String url="http://172.29.108.242:8080/MusicGrade/pRecMusic";
                     Map<String, Object> map = new HashMap<String, Object>();
                     map.put("time",time);
                     map.put("weather",weather);
@@ -215,7 +215,7 @@ public class SongListFragment extends Fragment {
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
-                            System.out.println("请求");
+                            System.out.println("请求失败");
                         }
 
                         @Override
@@ -256,7 +256,7 @@ public class SongListFragment extends Fragment {
                     });
                     break;
                 case 2:
-                    String url2="http://172.31.69.84:8080/MusicGrade/pGiveGrade";
+                    String url2="http://172.29.108.242:8080/MusicGrade/pGiveGrade";
                     Map<String, Object> map2 = new HashMap<String, Object>();
                     map2.put("time",time);
                     map2.put("weather",weather);
@@ -277,11 +277,12 @@ public class SongListFragment extends Fragment {
                     client2.newCall(request2).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
-                            System.out.println("没收到响应");
+                            System.out.println("评分没收到响应");
                         }
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
+                            System.out.println("评分成功");
                             System.out.println(response.body().string());
                             Looper.prepare();
                             Toast.makeText(getActivity().getApplicationContext(),"评分成功",Toast.LENGTH_SHORT).show();

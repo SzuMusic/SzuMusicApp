@@ -60,6 +60,8 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
     ImageView iv_next;
     @Bind(R.id.iv_play_page_bg)
     ImageView iv_play_page_bg;
+    @Bind(R.id.btn_like)
+    ImageView btn_like;
 
     CircleProgressBar circleProgress;
     private AlbumCoverView mAlbumCoverView;
@@ -77,6 +79,12 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
     Timer timer=new Timer();
     Bitmap coverBg;//专辑封面背景
     Bitmap blurBg;//模糊背景
+
+
+
+    long songid;//歌曲的id
+    double probability;//预测的概率
+
     TimerTask timerTask=new TimerTask() {
         @Override
         public void run() {
@@ -190,6 +198,7 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
         iv_play.setOnClickListener(this);
         sb_progress.setOnSeekBarChangeListener(this);
         iv_next.setOnClickListener(this);
+        btn_like.setOnClickListener(this);
         tv_title.setText(title);
         iv_play.setSelected(isPlaying);
 
@@ -362,6 +371,21 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
                 intent.putExtra("type",7);
                 getContext().sendBroadcast(intent);
                 break;
+            case R.id.btn_like:
+                System.out.println("点击了喜欢");
+                if(!btn_like.isSelected()){
+                    btn_like.setSelected(true);
+                    if(songid!=0){
+                        Intent commendIntent=new Intent("UPDATE_COMMEND");
+                        commendIntent.putExtra("musicId",songid);
+                        commendIntent.putExtra("score",5);
+                        commendIntent.putExtra("probability",probability);
+                        getContext().sendBroadcast(commendIntent);
+                    }
+                }
+                else
+                    btn_like.setSelected(false);
+                break;
         }
     }
 
@@ -395,6 +419,21 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
     public void setCoverBackground(Bitmap bmp){
         System.out.println("进入了PlayerFragment设置背景的函数");
         blurBg=bmp;
+    }
+    public long getSongid() {
+        return songid;
+    }
+
+    public void setSongid(long songid) {
+        this.songid = songid;
+    }
+
+    public double getProbability() {
+        return probability;
+    }
+
+    public void setProbability(double probability) {
+        this.probability = probability;
     }
 
     class PlayReceiver extends BroadcastReceiver {

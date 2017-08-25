@@ -119,6 +119,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     int stateIndex;//场景状态
     int feelIndex;//场景感受
     int addressIndex;//场景地址
+    long songid=0;//当前播放歌曲的id
+    double probability=0.5;//预测概率
 
     Handler handlerImg=new Handler(){
         @Override
@@ -262,6 +264,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 System.out.println("从service获得的进度为"+playService.getCurrentDuration());
                 playerFragment.setCurrent_duration( playService.getCurrentDuration());
                 playerFragment.setIsplaying(playService.getState());
+                playerFragment.setSongid(songid);
+                playerFragment.setProbability(probability);
                 if (albumBg!=null){
                     playerFragment.setBlackground(albumBg);
                     playerFragment.setCoverBackground(coverBg);
@@ -358,7 +362,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.update_userinfo:
-                String url="http://172.31.69.84:8080/MusicGrade/pUpdUserInfo";
+                String url="http://172.29.108.242:8080/MusicGrade/pUpdUserInfo";
                 OkHttpClient client = new OkHttpClient();
                 Map<String, Object> map = new HashMap<String, Object>();
                 e_name=e_name_tv.getText().toString();
@@ -445,7 +449,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            int type=intent.getIntExtra("type",1);//1表示添加新的歌曲到播放列表。3、2表示播放暂停事件,4表示更新进度,5表示监听到播放完成后自动播放下一首,6表示增加歌曲到播放列表，7表示向service请求下一首, 8表示更新场景信息
+            int type=intent.getIntExtra("type",1);//1表示添加新的歌曲到播放列表。3、2表示播放暂停事件,4表示更新进度,5表示监听到播放完成后自动播放下一首,6表示增加歌曲到播放列表，7表示向service请求下一首, 8表示场景初始化
             System.out.println("HomeActivity接受到了广播type："+type);
             switch (type){
                 case 1:
@@ -457,6 +461,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     tv_play_bar_title.setText(music.getTitle());
                     tv_play_bar_artist.setText(music.getArtist());
                     iv_play_bar_play.setSelected(true);
+                    songid=music.getId();
+                    probability=music.getProbability();
                     if(music.getCoverUri()!=null){
                         System.out.println("专辑封面url为："+music.getCoverUri());
                         OkHttpClient imgClient=new OkHttpClient();

@@ -83,7 +83,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             protected Void doInBackground(Void... params) {
                 System.out.println("执行了HomeFragment函数");
-                String url="http://172.31.69.84:8080/MusicGrade/pFirstSongs";
+                String url="http://172.29.108.242:8080/MusicGrade/pFirstSongs";
                 Map<String, Object> map = new HashMap<String, Object>();
                 final JSONObject jsonObject = new JSONObject(map);
                 System.out.println(jsonObject.toString());
