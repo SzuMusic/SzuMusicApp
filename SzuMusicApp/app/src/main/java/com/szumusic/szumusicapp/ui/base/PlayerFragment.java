@@ -205,13 +205,15 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
             tv_total_time.setText("0"+total_minute+":0"+total_second);
         else
             tv_total_time.setText("0"+total_minute+":"+total_second);
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                song_album.setImageBitmap(coverBg);
-                iv_play_page_bg.setImageBitmap(blurBg);
-            }
-        });
+        if(coverBg!=null&&blurBg!=null){
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    song_album.setImageBitmap(coverBg);
+                    iv_play_page_bg.setImageBitmap(blurBg);
+                }
+            });
+        }
 
     }
 
@@ -285,13 +287,15 @@ public class PlayerFragment extends Fragment implements ViewPager.OnPageChangeLi
             //System.out.println("当前的进度为"+(int)progress);
             sb_progress.setProgress((int)progress);
             circleProgress.setProgress((int)progress);
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    song_album.setImageBitmap(coverBg);
-                    iv_play_page_bg.setImageBitmap(blurBg);
-                }
-            });
+           if(coverBg!=null&&blurBg!=null){
+               new Handler().post(new Runnable() {
+                   @Override
+                   public void run() {
+                       song_album.setImageBitmap(coverBg);
+                       iv_play_page_bg.setImageBitmap(blurBg);
+                   }
+               });
+           }
         }
     }
 
