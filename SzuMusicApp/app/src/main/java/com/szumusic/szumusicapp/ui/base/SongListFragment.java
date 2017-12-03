@@ -77,7 +77,7 @@ public class SongListFragment extends Fragment {
             @Override
             protected Void doInBackground(Void... params) {
                 System.out.println("执行了SongListFragmentdoInBackground函数");
-                String url="http://172.29.108.242:8080/MusicGrade/pRecMusic";
+                String url="https://www.szumusic.top/pRecMusic";
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("isFirst","y");
                 map.put("userid",userid);
@@ -196,7 +196,7 @@ public class SongListFragment extends Fragment {
                     mood=intent.getIntExtra("mood",0);
                     state=intent.getIntExtra("state",0);
                     System.out.println(time);
-                    String url="http://172.29.108.242:8080/MusicGrade/pRecMusic";
+                    String url="https://www.szumusic.top/pRecMusic";
                     Map<String, Object> map = new HashMap<String, Object>();
                     map.put("time",time);
                     map.put("weather",weather);
@@ -256,7 +256,7 @@ public class SongListFragment extends Fragment {
                     });
                     break;
                 case 2:
-                    String url2="http://172.29.108.242:8080/MusicGrade/pGiveGrade";
+                    String url2="https://www.szumusic.top/pGiveGrade";
                     Map<String, Object> map2 = new HashMap<String, Object>();
                     map2.put("time",time);
                     map2.put("weather",weather);

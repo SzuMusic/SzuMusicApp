@@ -362,7 +362,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.update_userinfo:
-                String url="http://172.29.108.242:8080/MusicGrade/pUpdUserInfo";
+                String url="https://www.szumusic.top/pUpdUserInfo";
                 OkHttpClient client = new OkHttpClient();
                 Map<String, Object> map = new HashMap<String, Object>();
                 e_name=e_name_tv.getText().toString();
